@@ -55,4 +55,28 @@ void checknext(){
         c = source_[pos_++];}
     else{
         c = '\0';}}
+
+std::vector<Token> tokenize() {
+//To be made
+
+    }
+
+}
+
+Token nextToken() {
+//To be made
+// Skip whitespace and comments in loop
+// Safely consume the newline ending the comment without emitting a token  
+// Add EOF
+//New line tolken, and advance the line counter
+//Number literal
+//REturn idenitifer
+//String literal
+//Punctuation, math, and syntax i.e., + - / * {[(
+//Error for unknown character    
+}
+
+
+
+
 };
