@@ -16,8 +16,9 @@ public:
 
 private:
     std::string src_;
-    int pos_;
-    int line_;
+    size_t pos_;
+    size_t line_;
+    size_t col_;
 
     char current() const;
     char peek() const;
@@ -27,6 +28,7 @@ private:
     void skipWhitespaceAndComments();
 
     Token makeToken(TokenType type, const std::string& value) const;
+    Token makeToken(TokenType type, const std::string& value, const size_t col) const;
 
     Token readNumber();
     Token readString();

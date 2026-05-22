@@ -57,7 +57,8 @@ enum class TokenType {
 struct Token {
     TokenType type;
     std::string value;
-    int line;
+    size_t line;
+    size_t col;
 };
 
 #endif //CSA_FINAL_TOKEN_H
