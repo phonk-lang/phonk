@@ -16,21 +16,21 @@ public:
     keywords_ = {"int", "float", "string", "bool", "if", "else", "for","return", "true", "false", "print"}}
     
 private:
- std::string source
- size_t pos
- int line
- std::unordered_set<std::string> keywords
- char c
+ std::string source;
+ size_t pos;
+ int line;
+ std::unordered_set<std::string> keywords;
+ char c;
  
- void skipwhitespace(){
+void skipwhitespace(){
     while(pos<source.size()){
         c = source[pos];
-        if(c == ' ' || c == '\t')
-          pos++;
-        else
-            break;}}
+        if(c == ' ' || c == '\t'){
+          pos++;}
+        else{
+            break;}}}
             
-void skipblankline()
+void skipblankline(){
 
     while(pos<source.size()){
     c = source[pos];
@@ -43,12 +43,10 @@ void skipcomment(){
     if(c == '/' && pos + 1 < source.size() && source[pos + 1] == '/'){
         pos += 2;
         while(pos < source.size() && source[pos] != '\n')
-            pos++;
-    }
-}
+            pos++;}}
+
 void checknext(){
-    if(pos < source.size())
-        c = source[pos++];
-    else
-        c = '\0';
-}
+    if(pos < source.size()){
+        c = source[pos++];}
+    else{
+        c = '\0';}}
