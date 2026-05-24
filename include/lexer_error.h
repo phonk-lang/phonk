@@ -4,6 +4,7 @@
 
 #ifndef CSA_FINAL_LEXER_ERROR_H
 #define CSA_FINAL_LEXER_ERROR_H
+#include <string>
 #include <stdexcept>
 
 class LexerError : public std::runtime_error {

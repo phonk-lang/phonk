@@ -14,6 +14,7 @@ enum class TokenType {
 
     // Keywords
     Kw_Fn,
+    Kw_Return,
     Kw_Returns,
     Kw_If,
     Kw_Else,

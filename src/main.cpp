@@ -17,6 +17,7 @@ std::string tokenTypeName(TokenType t) {
         case TokenType::Kw_Else:    return "Kw_Else";
         case TokenType::Kw_For:     return "Kw_For";
         case TokenType::Kw_Print:   return "Kw_Print";
+        case TokenType::Kw_Return: return "Kw_Return";
         case TokenType::Kw_Returns: return "Kw_Returns";
         case TokenType::Kw_True:    return "Kw_True";
         case TokenType::Kw_False:   return "Kw_False";
