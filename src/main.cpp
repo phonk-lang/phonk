@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "lexer.h"
+#include "parser.h"
 #include "token.h"
 
 std::string tokenTypeName(TokenType t) {
@@ -70,38 +71,50 @@ void runTest(const std::string& label, const std::string& source) {
 
 
 int main() {
-    // Test 1: keywords and identifiers
-    runTest("Keywords", "int bool str if else for fn returns");
+    // // Test 1: keywords and identifiers
+    // runTest("Keywords", "int bool str if else for fn returns");
+    //
+    // // Test 2: a variable declaration
+    // runTest("Variable", "int x = 42;");
+    //
+    // // Test 3: a full function
+    // runTest("Function", R"(
+    //     fn add(int x) returns int {
+    //         int y = x + 1;
+    //         return y;
+    //     }
+    // )");
+    //
+    // // Test 4: if statement
+    // runTest("If statement", R"(
+    //     if (x == 10) {
+    //         print("yes");
+    //     }
+    // )");
+    //
+    // // Test 5: comments should produce no tokens
+    // runTest("Comment", "// this is a comment\nint x = 1;");
+    //
+    // // Test 6: two-character operators
+    // runTest("Operators", "== != <= >=");
+    //
+    // // Test 7: bad input should throw
+    // runTest("Bad character", "int x = @;");
+    //
+    // // Test 8: unterminated string should throw
+    // runTest("Unterminated string", "\"hello");
 
-    // Test 2: a variable declaration
-    runTest("Variable", "int x = 42;");
+    std::string source = "x + 2";
 
-    // Test 3: a full function
-    runTest("Function", R"(
-        fn add(int x) returns int {
-            int y = x + 1;
-            return y;
-        }
-    )");
+    Lexer lexer(source);
 
-    // Test 4: if statement
-    runTest("If statement", R"(
-        if (x == 10) {
-            print("yes");
-        }
-    )");
+    auto tokens = lexer.tokenize();
 
-    // Test 5: comments should produce no tokens
-    runTest("Comment", "// this is a comment\nint x = 1;");
+    Parser parser(tokens);
 
-    // Test 6: two-character operators
-    runTest("Operators", "== != <= >=");
+    auto ast = parser.parse();
 
-    // Test 7: bad input should throw
-    runTest("Bad character", "int x = @;");
-
-    // Test 8: unterminated string should throw
-    runTest("Unterminated string", "\"hello");
+    std::cout << ast->toString() << std::endl;
 
     return 0;
 }
