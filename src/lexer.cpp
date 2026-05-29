@@ -4,7 +4,7 @@
 #include "lexer.h"
 #include "token.h"
 
-#include "lexer_error.h"
+#include "error.h"
 
 static std::unordered_map<std::string, TokenType> kKeywords = {
     {"fn",      TokenType::Kw_Fn},

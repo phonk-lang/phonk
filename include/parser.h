@@ -9,7 +9,8 @@
 #include <memory>
 
 #include "token.h"
-#include "ast.h"
+#include "expression.h"
+#include "statement.h"
 
 class Parser {
 public:
@@ -22,7 +23,7 @@ public:
      *
      * @return The root node of the parsed expression tree.
      */
-    std::unique_ptr<Expression> parse();
+    std::vector<std::unique_ptr<Statement>> parse();
 
 private:
     std::vector<Token> tokens_;
@@ -67,10 +68,17 @@ private:
      * Parses the most basic expression units (numeric literals, variable references, etc.).
      *
      * @return A syntax tree representing the parsed factor.
-     *
-     * @throws std::runtime_error If no valid expression is found.
+     * @throws ParserError If no valid expression is found.
      */
     std::unique_ptr<Expression> parsePrimary();
+
+    /**
+     * Parses statements (e.g., print).
+     *
+     * @return A syntax tree representing the parsed statement.
+     * @throws ParserError If no closing right parenthesis is found.
+     */
+    std::unique_ptr<Statement> parseStatement();
 
 };
 

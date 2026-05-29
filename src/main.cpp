@@ -8,52 +8,10 @@
 #include "parser.h"
 #include "token.h"
 
-std::string tokenTypeName(TokenType t) {
-    switch (t) {
-        case TokenType::Kw_Fn:      return "Kw_Fn";
-        case TokenType::Kw_Int:     return "Kw_Int";
-        case TokenType::Kw_Bool:    return "Kw_Bool";
-        case TokenType::Kw_Str:     return "Kw_Str";
-        case TokenType::Kw_If:      return "Kw_If";
-        case TokenType::Kw_Else:    return "Kw_Else";
-        case TokenType::Kw_For:     return "Kw_For";
-        case TokenType::Kw_Print:   return "Kw_Print";
-        case TokenType::Kw_Return: return "Kw_Return";
-        case TokenType::Kw_Returns: return "Kw_Returns";
-        case TokenType::Kw_True:    return "Kw_True";
-        case TokenType::Kw_False:   return "Kw_False";
-        case TokenType::Identifier: return "Identifier";
-        case TokenType::Number:     return "Number";
-        case TokenType::String_Lit: return "String_Lit";
-        case TokenType::Plus:       return "Plus";
-        case TokenType::Minus:      return "Minus";
-        case TokenType::Star:       return "Star";
-        case TokenType::Slash:      return "Slash";
-        case TokenType::Assign:     return "Assign";
-        case TokenType::Eq:         return "Eq";
-        case TokenType::N_Eq:       return "N_Eq";
-        case TokenType::Lt:         return "Lt";
-        case TokenType::Gt:         return "Gt";
-        case TokenType::Lte:        return "Lte";
-        case TokenType::Gte:        return "Gte";
-        case TokenType::L_Paren:    return "L_Paren";
-        case TokenType::R_Paren:    return "R_Paren";
-        case TokenType::L_Brace:    return "L_Brace";
-        case TokenType::R_Brace:    return "R_Brace";
-        case TokenType::Semicolon:  return "Semicolon";
-        case TokenType::Comma:      return "Comma";
-        case TokenType::Dot:        return "Dot";
-        case TokenType::Newline:    return "Newline";
-        case TokenType::Unknown:    return "Unknown";
-        case TokenType::Eof_Token:  return "Eof_Token";
-        default:                    return "???";
-    }
-}
-
 void printTokens(const std::vector<Token>& tokens) {
     for (const auto& tok : tokens) {
         std::cout << "Line " << tok.line
-                  << " | " << tokenTypeName(tok.type)
+                  << " | " << Token::tokenTypeToString(tok.type) << "\n"
                   << " | '" << tok.value << "'\n";
     }
 }
@@ -104,17 +62,20 @@ int main() {
     // // Test 8: unterminated string should throw
     // runTest("Unterminated string", "\"hello");
 
-    std::string source = "x + 2";
+    const std::string source = R"(
+            print("hello");
+            print(1 + 2);
+            print((3 + 4) * 5);
+        )";
 
     Lexer lexer(source);
 
-    auto tokens = lexer.tokenize();
+    const auto tokens = lexer.tokenize();
 
     Parser parser(tokens);
 
-    auto ast = parser.parse();
-
-    std::cout << ast->toString() << std::endl;
-
+    for (const auto ast = parser.parse(); auto& statement : ast) {
+        std::cout << statement->toString() << "\n";
+    }
     return 0;
 }

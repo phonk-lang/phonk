@@ -4,6 +4,10 @@
 
 #include "parser.h"
 
+#include <iostream>
+
+#include "error.h"
+
 Parser::Parser(const std::vector<Token> &tokens) : tokens_(tokens), pos_(0) {}
 
 Token Parser::current() const {
@@ -65,7 +69,8 @@ std::unique_ptr<Expression> Parser::parsePrimary() {
         auto expr = parseExpression();
 
         if (current().type != TokenType::R_Paren) {
-            throw std::runtime_error("expected ')'");
+
+            throw ParserError(current().line, current().col, "expected ')'");
         }
 
         advance(); // consume ')'
@@ -78,14 +83,67 @@ std::unique_ptr<Expression> Parser::parsePrimary() {
         return std::make_unique<IdentifierExpression>(token.value);
     }
 
+    if (const Token token = current();
+        token.type == TokenType::String_Lit) {
+
+        advance();
+
+        return std::make_unique<StringExpression>(
+            token.value
+        );
+    }
+
     if (Token const token = current(); token.type == TokenType::Number) {
         advance();
         return std::make_unique<NumberExpression>(token.value);
     }
 
-    throw std::runtime_error("expected expression");
+    throw ParserError(current().line, current().col, "expected expression");
 }
 
-std::unique_ptr<Expression> Parser::parse() {
-    return parseExpression();
+std::vector<std::unique_ptr<Statement> > Parser::parse() {
+    std::vector<std::unique_ptr<Statement>> statements;
+
+    while (!isAtEnd()) {
+        statements.push_back(parseStatement());
+    }
+
+    return statements;
+}
+
+std::unique_ptr<Statement> Parser::parseStatement() {
+
+    if (current().type == TokenType::Kw_Print) {
+        advance(); // consume print
+
+        if (current().type != TokenType::L_Paren) {
+            throw ParserError(
+                current().line,
+                current().col,
+                "expected '(' after print"
+            );
+        }
+
+        advance(); // consume '('
+
+        auto expr = parseExpression();
+
+        if (current().type != TokenType::R_Paren) {
+            throw ParserError(current().line, current().col, "expected ')'");
+        }
+
+        advance();
+
+        if (current().type != TokenType::Semicolon) {
+            throw ParserError(current().line, current().col, "expected ';'");
+        }
+
+        advance();
+
+        return std::make_unique<PrintStatement>(
+            std::move(expr)
+        );
+    }
+
+    throw ParserError(current().line, current().col, "unknown expression");
 }

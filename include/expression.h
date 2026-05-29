@@ -26,6 +26,18 @@ public:
     }
 };
 
+class StringExpression : public Expression {
+public:
+    std::string value_;
+
+    explicit StringExpression(std::string value)
+        : value_(std::move(value)) {}
+
+    std::string toString() const override {
+        return "\"" + value_ + "\"";
+    }
+};
+
 class BinaryExpression : public Expression {
 public:
     std::unique_ptr<Expression> left_;
