@@ -2,11 +2,13 @@
 // Created by maxmo on 5/22/2026.
 //
 
+#include <fstream>
 #include <iostream>
 
 #include "lexer.h"
 #include "parser.h"
 #include "token.h"
+#include "transpiler.h"
 
 void printTokens(const std::vector<Token>& tokens) {
     for (const auto& tok : tokens) {
@@ -66,6 +68,8 @@ int main() {
             print("hello");
             print(1 + 2);
             print((3 + 4) * 5);
+            x = "hello";
+            print(x);
         )";
 
     Lexer lexer(source);
@@ -74,8 +78,23 @@ int main() {
 
     Parser parser(tokens);
 
-    for (const auto ast = parser.parse(); auto& statement : ast) {
-        std::cout << statement->toString() << "\n";
-    }
+    Transpiler transpiler(parser.parse());
+
+    std::string cppCode = transpiler.generateCPP();
+
+    // Write generated code
+    std::ofstream out("output.cpp"); // cmake-build-debug/
+
+    out << cppCode;
+
+    out.close();
+
+    // Compile generated code
+    system("g++ output.cpp -o output.exe");
+
+    // Run generated executable
+    system("output.exe");
+
+
     return 0;
 }

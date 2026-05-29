@@ -2,8 +2,8 @@
 // Created by maxmo on 5/26/2026.
 //
 
-#ifndef CSA_FINAL_AST_H
-#define CSA_FINAL_AST_H
+#ifndef CSA_FINAL_EXPRESSION_H
+#define CSA_FINAL_EXPRESSION_H
 #include <memory>
 #include <string>
 #include <utility>
@@ -11,6 +11,8 @@
 class Expression {
 public:
     virtual ~Expression() = default;
+
+    virtual std::string toCPP() const = 0;
 
     virtual std::string toString() const = 0;
 };
@@ -20,6 +22,10 @@ public:
     std::string value_;
 
     explicit NumberExpression(std::string value) : value_(std::move(value)) {}
+
+    std::string toCPP() const override {
+        return value_;
+    }
 
     std::string toString() const override {
         return value_;
@@ -32,6 +38,10 @@ public:
 
     explicit StringExpression(std::string value)
         : value_(std::move(value)) {}
+
+    std::string toCPP() const override {
+        return "\"" + value_ + "\"";
+    }
 
     std::string toString() const override {
         return "\"" + value_ + "\"";
@@ -53,6 +63,12 @@ public:
             op_(std::move(op)),
             right_(std::move(right)) {}
 
+    std::string toCPP() const override {
+        return "(" + left_->toCPP() + " " +
+               op_ + " " +
+               right_->toCPP() + ")";
+    }
+
     std::string toString() const override {
         return "(" + op_ + " " +
                left_->toString() + " " +
@@ -67,9 +83,13 @@ public:
     explicit IdentifierExpression(std::string identifier)
         : identifier_(std::move(identifier)) {}
 
+    std::string toCPP() const override {
+        return identifier_;
+    }
+
     std::string toString() const override {
         return identifier_;
     }
 };
 
-#endif //CSA_FINAL_AST_H
+#endif //CSA_FINAL_EXPRESSION_H

@@ -88,9 +88,7 @@ std::unique_ptr<Expression> Parser::parsePrimary() {
 
         advance();
 
-        return std::make_unique<StringExpression>(
-            token.value
-        );
+        return std::make_unique<StringExpression>(token.value);
     }
 
     if (Token const token = current(); token.type == TokenType::Number) {
@@ -112,6 +110,38 @@ std::vector<std::unique_ptr<Statement> > Parser::parse() {
 }
 
 std::unique_ptr<Statement> Parser::parseStatement() {
+
+    if (current().type == TokenType::Identifier) {
+
+        Token identifier = advance();
+
+        if (current().type != TokenType::Assign) {
+            throw ParserError(
+                current().line,
+                current().col,
+                "expected '='"
+            );
+        }
+
+        advance(); // consume '='
+
+        auto expr = parseExpression();
+
+        if (current().type != TokenType::Semicolon) {
+            throw ParserError(
+                current().line,
+                current().col,
+                "expected ';'"
+            );
+        }
+
+        advance();
+
+        return std::make_unique<AssignmentStatement>(
+            identifier.value,
+            std::move(expr)
+        );
+    }
 
     if (current().type == TokenType::Kw_Print) {
         advance(); // consume print
