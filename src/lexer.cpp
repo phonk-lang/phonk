@@ -19,6 +19,9 @@ static std::unordered_map<std::string, TokenType> kKeywords = {
     {"int",     TokenType::Kw_Int},
     {"bool",    TokenType::Kw_Bool},
     {"str",     TokenType::Kw_Str},
+    {"and",    TokenType::Kw_And},
+    {"or",     TokenType::Kw_Or},
+    {"not",    TokenType::Kw_Not},
 };
 
 Lexer::Lexer(const std::string &source) : src_(source), pos_(0), line_(1), col_(1) {}

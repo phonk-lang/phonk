@@ -25,6 +25,9 @@ enum class TokenType {
     Kw_Bool,
     Kw_Int,
     Kw_Str,
+    Kw_And,
+    Kw_Or,
+    Kw_Not,
 
     // Math
     Plus,

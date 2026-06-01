@@ -26,7 +26,84 @@ Token Parser::advance() {
     return tokens_.at(pos_ - 1);
 }
 
-std::unique_ptr<Expression> Parser::parseExpression() {
+std::vector<std::unique_ptr<Statement> > Parser::parse() {
+    std::vector<std::unique_ptr<Statement>> statements;
+
+    while (!isAtEnd()) {
+        statements.push_back(parseStatement());
+    }
+
+    return statements;
+}
+
+std::unique_ptr<Expression> Parser::parseOr() {
+
+    auto expr = parseAnd();
+
+    while (current().type == TokenType::Kw_Or) {
+
+        Token op = advance();
+
+        auto right = parseAnd();
+
+        expr = std::make_unique<BinaryExpression>(
+            std::move(expr),
+            op.value,
+            std::move(right)
+        );
+    }
+
+    return expr;
+}
+
+std::unique_ptr<Expression> Parser::parseAnd() {
+
+    auto expr = parseComparison();
+
+    while (current().type == TokenType::Kw_And) {
+
+        Token op = advance();
+
+        auto right = parseComparison();
+
+        expr = std::make_unique<BinaryExpression>(
+            std::move(expr),
+            op.value,
+            std::move(right)
+        );
+    }
+
+    return expr;
+}
+
+std::unique_ptr<Expression> Parser::parseComparison() {
+
+    auto expr = parseArithmetic();
+
+    while (
+        current().type == TokenType::Eq   ||
+        current().type == TokenType::N_Eq ||
+        current().type == TokenType::Lt   ||
+        current().type == TokenType::Gt   ||
+        current().type == TokenType::Lte  ||
+        current().type == TokenType::Gte
+    ) {
+
+        Token op = advance();
+
+        auto right = parseArithmetic();
+
+        expr = std::make_unique<BinaryExpression>(
+            std::move(expr),
+            op.value,
+            std::move(right)
+        );
+    }
+
+    return expr;
+}
+
+std::unique_ptr<Expression> Parser::parseArithmetic() {
     auto expr = parseTerm();
 
     while (
@@ -62,11 +139,22 @@ std::unique_ptr<Expression> Parser::parseTerm() {
 }
 
 std::unique_ptr<Expression> Parser::parsePrimary() {
+    if (current().type == TokenType::Kw_Not) {
+
+        Token op = advance();
+
+        auto expr = parsePrimary();
+
+        return std::make_unique<UnaryExpression>(
+            op.value,
+            std::move(expr)
+        );
+    }
 
     if (current().type == TokenType::L_Paren) {
         advance(); // consume '('
 
-        auto expr = parseExpression();
+        auto expr = parseOr();
 
         if (current().type != TokenType::R_Paren) {
 
@@ -76,6 +164,16 @@ std::unique_ptr<Expression> Parser::parsePrimary() {
         advance(); // consume ')'
 
         return expr;
+    }
+
+    if (const Token token = current(); token.type == TokenType::Kw_True) {
+        advance();
+        return std::make_unique<BooleanExpression>(true);
+    }
+
+    if (const Token token = current(); token.type == TokenType::Kw_False) {
+        advance();
+        return std::make_unique<BooleanExpression>(false);
     }
 
     if (const Token token = current(); token.type == TokenType::Identifier) {
@@ -99,17 +197,11 @@ std::unique_ptr<Expression> Parser::parsePrimary() {
     throw ParserError(current().line, current().col, "expected expression");
 }
 
-std::vector<std::unique_ptr<Statement> > Parser::parse() {
-    std::vector<std::unique_ptr<Statement>> statements;
-
-    while (!isAtEnd()) {
-        statements.push_back(parseStatement());
-    }
-
-    return statements;
-}
-
 std::unique_ptr<Statement> Parser::parseStatement() {
+
+    if (current().type == TokenType::Kw_If) {
+        return parseIfStatement();
+    }
 
     if (current().type == TokenType::Identifier) {
 
@@ -125,7 +217,7 @@ std::unique_ptr<Statement> Parser::parseStatement() {
 
         advance(); // consume '='
 
-        auto expr = parseExpression();
+        auto expr = parseOr();
 
         if (current().type != TokenType::Semicolon) {
             throw ParserError(
@@ -156,7 +248,7 @@ std::unique_ptr<Statement> Parser::parseStatement() {
 
         advance(); // consume '('
 
-        auto expr = parseExpression();
+        auto expr = parseOr();
 
         if (current().type != TokenType::R_Paren) {
             throw ParserError(current().line, current().col, "expected ')'");
@@ -176,4 +268,117 @@ std::unique_ptr<Statement> Parser::parseStatement() {
     }
 
     throw ParserError(current().line, current().col, "unknown expression");
+}
+
+std::vector<std::unique_ptr<Statement>> Parser::parseBlock() {
+    std::vector<std::unique_ptr<Statement>> statements;
+
+    while (
+        !isAtEnd() &&
+        current().type != TokenType::R_Brace
+    ) {
+        statements.push_back(parseStatement());
+    }
+
+    return statements;
+}
+
+std::unique_ptr<Statement> Parser::parseIfStatement() {
+
+    advance(); // consume 'if'
+
+    if (current().type != TokenType::L_Paren) {
+        throw ParserError(
+            current().line,
+            current().col,
+            "expected '(' after if"
+        );
+    }
+
+    advance(); // consume '('
+
+    auto condition = parseOr();
+
+    if (current().type != TokenType::R_Paren) {
+        throw ParserError(
+            current().line,
+            current().col,
+            "expected ')'"
+        );
+    }
+
+    advance(); // consume ')'
+
+    if (current().type != TokenType::L_Brace) {
+        throw ParserError(
+            current().line,
+            current().col,
+            "expected '{'"
+        );
+    }
+
+    advance(); // consume '{'
+
+    auto thenBody = parseBlock();
+
+    if (current().type != TokenType::R_Brace) {
+        throw ParserError(
+            current().line,
+            current().col,
+            "expected '}'"
+        );
+    }
+
+    advance(); // consume '}'
+
+    std::vector<std::unique_ptr<Statement>> elseBody;
+    std::unique_ptr<IfStatement> elseIf = nullptr;
+
+    if (current().type == TokenType::Kw_Else) {
+
+        advance(); // consume 'else'
+
+        // else if (...)
+        if (current().type == TokenType::Kw_If) {
+
+            auto stmt = parseIfStatement();
+
+            elseIf.reset(
+                dynamic_cast<IfStatement*>(stmt.release())
+            );
+        }
+
+        // else { ... }
+        else {
+
+            if (current().type != TokenType::L_Brace) {
+                throw ParserError(
+                    current().line,
+                    current().col,
+                    "expected '{' after else"
+                );
+            }
+
+            advance(); // consume '{'
+
+            elseBody = parseBlock();
+
+            if (current().type != TokenType::R_Brace) {
+                throw ParserError(
+                    current().line,
+                    current().col,
+                    "expected '}'"
+                );
+            }
+
+            advance(); // consume '}'
+        }
+    }
+
+    return std::make_unique<IfStatement>(
+        std::move(condition),
+        std::move(thenBody),
+        std::move(elseBody),
+        std::move(elseIf)
+    );
 }

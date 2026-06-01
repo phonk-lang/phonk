@@ -50,12 +50,18 @@ private:
      */
     Token advance();
 
+    std::unique_ptr<Expression> parseOr();
+
+    std::unique_ptr<Expression> parseAnd();
+
+    std::unique_ptr<Expression> parseComparison();
+
     /**
-     * Parses addition and subtraction expressions.
+     * Parses addition and subtraction.
      *
      * @return A syntax tree representing the parsed expression.
      */
-    std::unique_ptr<Expression> parseExpression();
+    std::unique_ptr<Expression> parseArithmetic();
 
     /**
      * Parses multiplication and division expressions.
@@ -79,6 +85,10 @@ private:
      * @throws ParserError If no closing right parenthesis is found.
      */
     std::unique_ptr<Statement> parseStatement();
+
+    std::unique_ptr<Statement> parseIfStatement();
+
+    std::vector<std::unique_ptr<Statement>> parseBlock();
 
 };
 

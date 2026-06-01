@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 #include "lexer.h"
 #include "parser.h"
@@ -64,13 +65,17 @@ int main() {
     // // Test 8: unterminated string should throw
     // runTest("Unterminated string", "\"hello");
 
-    const std::string source = R"(
-            print("hello");
-            print(1 + 2);
-            print((3 + 4) * 5);
-            x = "hello";
-            print(x);
-        )";
+    std::ifstream file("../program.templang");
+
+    if (!file) {
+        std::cerr << "Failed to open file\n";
+        return 1;
+    }
+
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+
+    std::string source = buffer.str();
 
     Lexer lexer(source);
 
@@ -94,7 +99,6 @@ int main() {
 
     // Run generated executable
     system("output.exe");
-
 
     return 0;
 }

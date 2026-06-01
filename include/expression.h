@@ -64,8 +64,17 @@ public:
             right_(std::move(right)) {}
 
     std::string toCPP() const override {
+        std::string cppOp{op_};
+
+        if (op_ == "and") {
+            cppOp = "&&";
+        }
+        if (op_ == "or") {
+            cppOp = "||";
+        }
+
         return "(" + left_->toCPP() + " " +
-               op_ + " " +
+               cppOp + " " +
                right_->toCPP() + ")";
     }
 
@@ -89,6 +98,51 @@ public:
 
     std::string toString() const override {
         return identifier_;
+    }
+};
+
+class BooleanExpression : public Expression {
+public:
+    bool value_;
+
+    explicit BooleanExpression(const bool value)
+        : value_(value) {}
+
+    std::string toCPP() const override {
+        return value_ ? "true" : "false";
+    }
+
+    std::string toString() const override {
+        return value_ ? "true" : "false";
+    }
+};
+
+class UnaryExpression : public Expression {
+public:
+    std::string op_;
+    std::unique_ptr<Expression> expr_;
+
+    UnaryExpression(
+        std::string op,
+        std::unique_ptr<Expression> expr
+    )
+        : op_(std::move(op)),
+          expr_(std::move(expr)) {}
+
+    std::string toCPP() const override {
+
+        std::string cppOp = op_;
+
+        if (op_ == "not") {
+            cppOp = "!";
+        }
+
+        return "(" + cppOp + expr_->toCPP() + ")";
+    }
+
+    std::string toString() const override {
+        return "(" + op_ + " " +
+               expr_->toString() + ")";
     }
 };
 

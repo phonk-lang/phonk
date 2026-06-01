@@ -61,4 +61,92 @@ public:
     }
 };
 
+class IfStatement : public Statement {
+public:
+    std::unique_ptr<Expression> condition_;
+
+    std::vector<std::unique_ptr<Statement>> thenBody_;
+
+    std::vector<std::unique_ptr<Statement>> elseBody_;
+
+    std::unique_ptr<IfStatement> elseIf_;
+
+    explicit IfStatement(
+        std::unique_ptr<Expression> condition,
+        std::vector<std::unique_ptr<Statement>> thenBody,
+        std::vector<std::unique_ptr<Statement>> elseBody = {},
+        std::unique_ptr<IfStatement> elseIf = nullptr
+    )
+        : condition_(std::move(condition)),
+          thenBody_(std::move(thenBody)),
+          elseBody_(std::move(elseBody)),
+          elseIf_(std::move(elseIf)) {}
+
+    std::string toCPP() const override {
+
+        std::string result =
+            "if (" + condition_->toCPP() + ") {\n";
+
+        for (const auto& stmt : thenBody_) {
+            result += "        " + stmt->toCPP() + "\n";
+        }
+
+        result += "    }";
+
+        if (elseIf_) {
+
+            result += " else ";
+            result += elseIf_->toCPP();
+
+        } else if (!elseBody_.empty()) {
+
+            result += " else {\n";
+
+            for (const auto& stmt : elseBody_) {
+                result += "        " + stmt->toCPP() + "\n";
+            }
+
+            result += "    }";
+        }
+
+        result += "\n";
+
+        return result;
+    }
+
+    std::string toString() const override {
+
+        std::string thenPart;
+
+        for (const auto& stmt : thenBody_) {
+            thenPart += stmt->toString() + " ";
+        }
+
+        std::string result =
+            "(if " +
+            condition_->toString() +
+            " (" +
+            thenPart +
+            ")";
+
+        if (elseIf_) {
+            result += " " + elseIf_->toString();
+        }
+        else if (!elseBody_.empty()) {
+
+            std::string elsePart;
+
+            for (const auto& stmt : elseBody_) {
+                elsePart += stmt->toString() + " ";
+            }
+
+            result += " (else " + elsePart + ")";
+        }
+
+        result += ")";
+
+        return result;
+    }
+};
+
 #endif //CSA_FINAL_STATEMENT_H
