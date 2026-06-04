@@ -18,7 +18,7 @@ enum class TokenType {
     Kw_Returns,
     Kw_If,
     Kw_Else,
-    Kw_For,
+    Kw_While,
     Kw_Print,
     Kw_True,
     Kw_False,
@@ -34,6 +34,7 @@ enum class TokenType {
     Minus,
     Star,
     Slash,
+    Percent,
 
     // Symbols
     L_Paren,
@@ -81,9 +82,9 @@ struct Token {
             case TokenType::Kw_Str:     return "Kw_Str";
             case TokenType::Kw_If:      return "Kw_If";
             case TokenType::Kw_Else:    return "Kw_Else";
-            case TokenType::Kw_For:     return "Kw_For";
+            case TokenType::Kw_While:   return "Kw_While";
             case TokenType::Kw_Print:   return "Kw_Print";
-            case TokenType::Kw_Return: return  "Kw_Return";
+            case TokenType::Kw_Return:  return "Kw_Return";
             case TokenType::Kw_Returns: return "Kw_Returns";
             case TokenType::Kw_True:    return "Kw_True";
             case TokenType::Kw_False:   return "Kw_False";

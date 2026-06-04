@@ -10,7 +10,7 @@
 
 class Lexer {
 public:
-    Lexer(const std::string& source);
+    Lexer(std::string  source);
 
     std::vector<Token> tokenize();
 
@@ -28,7 +28,7 @@ private:
     void skipWhitespaceAndComments();
 
     Token makeToken(TokenType type, const std::string& value) const;
-    Token makeToken(TokenType type, const std::string& value, const size_t col) const;
+    Token makeToken(TokenType type, const std::string& value, size_t col) const;
 
     Token readNumber();
     Token readString();

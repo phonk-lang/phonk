@@ -4,8 +4,6 @@
 
 #include "parser.h"
 
-#include <iostream>
-
 #include "error.h"
 
 Parser::Parser(const std::vector<Token> &tokens) : tokens_(tokens), pos_(0) {}
@@ -127,7 +125,7 @@ std::unique_ptr<Expression> Parser::parseArithmetic() {
 std::unique_ptr<Expression> Parser::parseTerm() {
     auto expr = parsePrimary();
 
-    while (current().type == TokenType::Star || current().type == TokenType::Slash) {
+    while (current().type == TokenType::Star || current().type == TokenType::Slash || current().type == TokenType::Percent) {
         Token op = advance();
 
         auto right = parsePrimary();
@@ -198,6 +196,10 @@ std::unique_ptr<Expression> Parser::parsePrimary() {
 }
 
 std::unique_ptr<Statement> Parser::parseStatement() {
+
+    if (current().type == TokenType::Kw_While) {
+        return parseWhileStatement();
+    }
 
     if (current().type == TokenType::Kw_If) {
         return parseIfStatement();
@@ -381,4 +383,54 @@ std::unique_ptr<Statement> Parser::parseIfStatement() {
         std::move(elseBody),
         std::move(elseIf)
     );
+}
+
+std::unique_ptr<Statement> Parser::parseWhileStatement() {
+    advance(); // consume 'while'
+
+    if (current().type != TokenType::L_Paren) {
+        throw ParserError(
+            current().line,
+            current().col,
+            "expected '(' after while"
+        );
+    }
+
+    advance(); // consume '('
+
+    auto condition = parseOr();
+
+    if (current().type != TokenType::R_Paren) {
+        throw ParserError(
+            current().line,
+            current().col,
+            "expected ')'"
+        );
+    }
+
+    advance(); // consume ')'
+
+    if (current().type != TokenType::L_Brace) {
+        throw ParserError(
+            current().line,
+            current().col,
+            "expected '{'"
+        );
+    }
+
+    advance(); // consume '{'
+
+    auto body = parseBlock();
+
+    if (current().type != TokenType::R_Brace) {
+        throw ParserError(
+            current().line,
+            current().col,
+            "expected '}'"
+        );
+    }
+
+    advance(); // consume '}'
+
+    return std::make_unique<WhileStatement>(std::move(condition), std::move(body));
 }

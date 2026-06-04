@@ -13,13 +13,20 @@
 
 class Transpiler {
 public:
-    static std::unordered_set<std::string> declaredVariables_;
+    std::unordered_set<std::string> declaredVariables_;
 
     explicit Transpiler(std::vector<std::unique_ptr<Statement>> statements) : statements_(std::move(statements)) {};
 
-    std::string generateCPP() const;
+    std::string generateCPP();
 private:
     std::vector<std::unique_ptr<Statement>> statements_;
+
+    std::string generateStatement(
+        const Statement* stmt,
+        int indentLevel
+    );
+
+    static std::string indent(int level) ;
 };
 
 #endif //CSA_FINAL_TRANSPILER_H

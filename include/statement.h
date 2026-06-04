@@ -149,4 +149,44 @@ public:
     }
 };
 
+class WhileStatement : public Statement {
+public:
+    std::unique_ptr<Expression> condition_;
+
+    std::vector<std::unique_ptr<Statement>> body_;
+
+    explicit WhileStatement(std::unique_ptr<Expression> condition, std::vector<std::unique_ptr<Statement>> body)
+            : condition_(std::move(condition)), body_(std::move(body)) {}
+
+    std::string toCPP() const override {
+        std::string result =
+            "while (" + condition_->toCPP() + ") {\n";
+
+        for (const auto& stmt : body_) {
+            result += "        " + stmt->toCPP() + "\n";
+        }
+
+        result += "    }";
+
+        return result;
+    }
+
+    std::string toString() const override {
+        std::string body;
+
+        for (const auto& stmt : body_) {
+            body += stmt->toString() + " ";
+        }
+
+        std::string result =
+            "(while " +
+            condition_->toString() +
+            " (" +
+            body +
+            "))";
+
+        return result;
+    }
+};
+
 #endif //CSA_FINAL_STATEMENT_H

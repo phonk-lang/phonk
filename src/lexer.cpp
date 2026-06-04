@@ -1,5 +1,6 @@
 #include<string>
 #include<unordered_map>
+#include <utility>
 
 #include "lexer.h"
 #include "token.h"
@@ -12,19 +13,19 @@ static std::unordered_map<std::string, TokenType> kKeywords = {
     {"returns", TokenType::Kw_Returns},
     {"if",      TokenType::Kw_If},
     {"else",    TokenType::Kw_Else},
-    {"for",     TokenType::Kw_For},
+    {"while",   TokenType::Kw_While},
     {"print",   TokenType::Kw_Print},
     {"true",    TokenType::Kw_True},
     {"false",   TokenType::Kw_False},
     {"int",     TokenType::Kw_Int},
     {"bool",    TokenType::Kw_Bool},
     {"str",     TokenType::Kw_Str},
-    {"and",    TokenType::Kw_And},
-    {"or",     TokenType::Kw_Or},
-    {"not",    TokenType::Kw_Not},
+    {"and",     TokenType::Kw_And},
+    {"or",      TokenType::Kw_Or},
+    {"not",     TokenType::Kw_Not},
 };
 
-Lexer::Lexer(const std::string &source) : src_(source), pos_(0), line_(1), col_(1) {}
+Lexer::Lexer(std::string source) : src_(std::move(source)), pos_(0), line_(1), col_(1) {}
 
 char Lexer::current() const {
     return isAtEnd() ? '\0' : src_[pos_];
@@ -162,6 +163,7 @@ std::vector<Token> Lexer::tokenize() {
             case '-': tokens.push_back(makeToken(TokenType::Minus, "-", token_col)); break;
             case '*': tokens.push_back(makeToken(TokenType::Star, "*", token_col)); break;
             case '/': tokens.push_back(makeToken(TokenType::Slash, "/", token_col)); break;
+            case '%': tokens.push_back(makeToken(TokenType::Percent, "%", token_col)); break;
             case '<':
                 if (current() == '=') { advance(); tokens.push_back(makeToken(TokenType::Lte, "<=", token_col)); }
                 else tokens.push_back(makeToken(TokenType::Lt, "<", token_col));

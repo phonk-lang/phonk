@@ -64,7 +64,7 @@ private:
     std::unique_ptr<Expression> parseArithmetic();
 
     /**
-     * Parses multiplication and division expressions.
+     * Parses multiplication, division, and modular arithmetic expressions.
      *
      * @return A syntax tree representing the parsed term.
      */
@@ -90,6 +90,7 @@ private:
 
     std::vector<std::unique_ptr<Statement>> parseBlock();
 
+    std::unique_ptr<Statement> parseWhileStatement();
 };
 
 #endif //CSA_FINAL_PARSER_H

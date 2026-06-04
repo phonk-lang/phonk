@@ -31,7 +31,7 @@ void runTest(const std::string& label, const std::string& source) {
 }
 
 
-int main() {
+int main(int argc, char* argv[]) {
     // // Test 1: keywords and identifiers
     // runTest("Keywords", "int bool str if else for fn returns");
     //
