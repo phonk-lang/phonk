@@ -52,13 +52,39 @@ bool Lexer::isAtEnd() const {
 
 void Lexer::skipWhitespaceAndComments() {
     while (!isAtEnd()) {
-        const char c = current();
-        if (c == '\n' || c == ' ' || c == '\r' || c == '\t') {
+
+        if (const char c = current();
+            c == '\n' || c == ' ' || c == '\r' || c == '\t') {
+
             advance();
-        } else if (c == '/' && peek() == '/') {
-            // Single-line comment — skip to end of line
-            while (!isAtEnd() && current() != '\n')
+            }
+
+        // single-line comment //
+        else if (current() == '/' && peek() == '/') {
+            while (!isAtEnd() && current() != '\n') {
                 advance();
+            }
+        }
+
+        // multi-line comment /* ... */
+        else if (current() == '/' && peek() == '*') {
+            advance(); // '/'
+            advance(); // '*'
+
+            while (!isAtEnd()) {
+
+                if (current() == '*' && peek() == '/') {
+                    advance(); // '*'
+                    advance(); // '/'
+                    break;
+                }
+
+                advance();
+            }
+
+            if (isAtEnd()) {
+                throw LexerError(line_, col_, "unterminated block comment");
+            }
         } else {
             break;
         }
