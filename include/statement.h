@@ -189,4 +189,49 @@ public:
     }
 };
 
+class FunctionStatement : public Statement {
+public:
+
+    std::string name_;
+
+    std::vector<std::string> params_;
+
+    std::vector<std::unique_ptr<Statement>> body_;
+
+    FunctionStatement(
+        std::string name,
+        std::vector<std::string> params,
+        std::vector<std::unique_ptr<Statement>> body
+    )
+        : name_(std::move(name)),
+          params_(std::move(params)),
+          body_(std::move(body)) {}
+
+    std::string toCPP() const override {
+        return "";
+    }
+
+    std::string toString() const override {
+        return "(function " + name_ + ")";
+    }
+};
+
+class ReturnStatement : public Statement {
+public:
+    std::unique_ptr<Expression> expr_;
+
+    explicit ReturnStatement(
+        std::unique_ptr<Expression> expr
+    )
+        : expr_(std::move(expr)) {}
+
+    std::string toCPP() const override {
+        return "return " + expr_->toCPP() + ";";
+    }
+
+    std::string toString() const override {
+        return "(return " + expr_->toString() + ")";
+    }
+};
+
 #endif //CSA_FINAL_STATEMENT_H

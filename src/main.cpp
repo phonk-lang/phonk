@@ -2,6 +2,7 @@
 // Created by maxmo on 5/22/2026.
 //
 
+#include <chrono>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -65,7 +66,7 @@ int main(int argc, char* argv[]) {
     // // Test 8: unterminated string should throw
     // runTest("Unterminated string", "\"hello");
 
-    std::ifstream file("../program.templang");
+    std::ifstream file("../example.phonk");
 
     if (!file) {
         std::cerr << "Failed to open file\n";
@@ -77,15 +78,24 @@ int main(int argc, char* argv[]) {
 
     std::string source = buffer.str();
 
+    using Clock = std::chrono::high_resolution_clock;
+
+    auto totalStart = Clock::now();
+
+    auto lexStart = Clock::now();
     Lexer lexer(source);
-
     const auto tokens = lexer.tokenize();
+    auto lexEnd = Clock::now();
 
+    auto parseStart = Clock::now();
     Parser parser(tokens);
+    auto ast = parser.parse();
+    auto parseEnd = Clock::now();
 
-    Transpiler transpiler(parser.parse());
-
+    auto transpileStart = Clock::now();
+    Transpiler transpiler(std::move(ast));
     std::string cppCode = transpiler.generateCPP();
+    auto transpileEnd = Clock::now();
 
     // Write generated code
     std::ofstream out("output.cpp"); // cmake-build-debug/
@@ -95,10 +105,58 @@ int main(int argc, char* argv[]) {
     out.close();
 
     // Compile generated code
+    auto compileStart = Clock::now();
+
     system("g++ output.cpp -o output.exe");
+
+    auto compileEnd = Clock::now();
+
+    auto totalEnd = Clock::now();
 
     // Run generated executable
     system("output.exe");
+
+    std::cout << "\n=== Compile Statistics ===\n";
+
+    std::cout << "Tokens: " << tokens.size() << '\n';
+
+    std::cout << "Lexer: "
+              << std::chrono::duration_cast<std::chrono::microseconds>(
+                     lexEnd - lexStart
+                 ).count()
+              << " us\n";
+
+    std::cout << "Parser: "
+              << std::chrono::duration_cast<std::chrono::microseconds>(
+                     parseEnd - parseStart
+                 ).count()
+              << " us\n";
+
+    std::cout << "Transpiler: "
+              << std::chrono::duration_cast<std::chrono::microseconds>(
+                     transpileEnd - transpileStart
+                 ).count()
+              << " us\n";
+
+    std::cout << "Frontend Compiler: "
+              << std::chrono::duration_cast<std::chrono::microseconds>(
+                     transpileEnd - totalStart
+                 ).count()
+              << " us\n";
+
+
+
+    std::cout << "g++: "
+              << std::chrono::duration_cast<std::chrono::milliseconds>(
+                     compileEnd - compileStart
+                 ).count()
+              << " ms\n";
+
+    std::cout << "Total: "
+              << std::chrono::duration_cast<std::chrono::milliseconds>(
+                     totalEnd - totalStart
+                 ).count()
+              << " ms\n";
 
     return 0;
 }

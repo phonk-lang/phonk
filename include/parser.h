@@ -91,6 +91,10 @@ private:
     std::vector<std::unique_ptr<Statement>> parseBlock();
 
     std::unique_ptr<Statement> parseWhileStatement();
+
+    std::unique_ptr<Statement> parseFunctionStatement();
+
+    std::unique_ptr<Statement> parseReturnStatement();
 };
 
 #endif //CSA_FINAL_PARSER_H

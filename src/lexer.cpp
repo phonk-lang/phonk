@@ -8,7 +8,7 @@
 #include "error.h"
 
 static std::unordered_map<std::string, TokenType> kKeywords = {
-    {"fn",      TokenType::Kw_Fn},
+    {"phonk",   TokenType::Kw_Phonk},
     {"return",  TokenType::Kw_Return},
     {"returns", TokenType::Kw_Returns},
     {"if",      TokenType::Kw_If},

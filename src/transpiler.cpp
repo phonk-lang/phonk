@@ -1,74 +1,93 @@
-//
-// Created by maxmo on 5/29/2026.
-//
-
 #include "transpiler.h"
 
 std::string Transpiler::generateCPP() {
 
-    declaredVariables_.clear();
+    scopes_.clear();
+    scopes_.push_back({});
 
-    std::string result =
-        "#include <iostream>\n\n"
-        "int main() {\n";
+    functions.clear();
+
+    std::string mainBody;
 
     for (const auto& statement : statements_) {
-
-        result += generateStatement(
-            statement.get(),
-            1
-        );
+        mainBody += generateStatement(statement.get(), 1);
     }
 
-    result +=
+    return
+        "#include <iostream>\n\n" +
+        functions +
+        "\nint main() {\n" +
+        mainBody +
         "    return 0;\n"
         "}";
-
-    return result;
 }
 
-std::string Transpiler::indent(const int level) {
+std::string Transpiler::indent(int level) {
     return std::string(level * 4, ' ');
 }
 
-std::string Transpiler::generateStatement(const Statement* stmt, int indentLevel) {
-    if (const auto assign = dynamic_cast<const AssignmentStatement*>(stmt)) {
-        std::string result;
+std::string Transpiler::generateStatement(Statement* stmt, int indentLevel) {
 
-        if (!declaredVariables_.contains(assign->identifier_)) {
+    if (auto fn = dynamic_cast<FunctionStatement*>(stmt)) {
 
-            declaredVariables_.insert(assign->identifier_);
+        std::string result = "auto " + fn->name_ + "(";
 
-            result =
-                indent(indentLevel) +
-                "auto " +
-                assign->identifier_ +
-                " = " +
-                assign->expression_->toCPP() +
-                ";\n";
-        }
-        else {
-
-            result =
-                indent(indentLevel) +
-                assign->identifier_ +
-                " = " +
-                assign->expression_->toCPP() +
-                ";\n";
+        for (size_t i = 0; i < fn->params_.size(); i++) {
+            result += "auto " + fn->params_[i];
+            if (i + 1 < fn->params_.size()) result += ", ";
         }
 
-        return result;
-    }
-    if (const auto print = dynamic_cast<const PrintStatement*>(stmt)) {
+        result += ") {\n";
 
-        return
-            indent(indentLevel) +
-            "std::cout << " +
-            print->expression_->toCPP() +
-            " << std::endl;\n";
+        pushScope();
+
+        for (const auto& s : fn->body_) {
+            result += generateStatement(s.get(), 1);
+        }
+
+        popScope();
+
+        result += "}\n\n";
+
+        functions += result;
+
+        return "";
     }
 
-    if (const auto loop = dynamic_cast<const WhileStatement*>(stmt)) {
+    if (auto ret = dynamic_cast<ReturnStatement*>(stmt)) {
+        return indent(indentLevel) +
+               "return " +
+               ret->expr_->toCPP() +
+               ";\n";
+    }
+
+    if (auto assign = dynamic_cast<AssignmentStatement*>(stmt)) {
+
+        if (!isDeclared(assign->identifier_)) {
+            declare(assign->identifier_);
+            return indent(indentLevel) +
+                   "auto " +
+                   assign->identifier_ +
+                   " = " +
+                   assign->expression_->toCPP() +
+                   ";\n";
+        }
+
+        return indent(indentLevel) +
+               assign->identifier_ +
+               " = " +
+               assign->expression_->toCPP() +
+               ";\n";
+    }
+
+    if (auto print = dynamic_cast<PrintStatement*>(stmt)) {
+        return indent(indentLevel) +
+               "std::cout << " +
+               print->expression_->toCPP() +
+               " << std::endl;\n";
+    }
+
+    if (auto loop = dynamic_cast<WhileStatement*>(stmt)) {
 
         std::string result =
             indent(indentLevel) +
@@ -76,20 +95,20 @@ std::string Transpiler::generateStatement(const Statement* stmt, int indentLevel
             loop->condition_->toCPP() +
             ") {\n";
 
-        for (const auto& statement : loop->body_) {
+        pushScope();
 
-            result += generateStatement(
-                statement.get(),
-                indentLevel + 1
-            );
+        for (const auto& statement : loop->body_) {
+            result += generateStatement(statement.get(), indentLevel + 1);
         }
+
+        popScope();
 
         result += indent(indentLevel) + "}\n";
 
         return result;
     }
 
-    if (const auto ifStmt = dynamic_cast<const IfStatement*>(stmt)) {
+    if (auto ifStmt = dynamic_cast<IfStatement*>(stmt)) {
 
         std::string result =
             indent(indentLevel) +
@@ -97,25 +116,19 @@ std::string Transpiler::generateStatement(const Statement* stmt, int indentLevel
             ifStmt->condition_->toCPP() +
             ") {\n";
 
-        for (const auto& statement : ifStmt->thenBody_) {
+        pushScope();
 
-            result += generateStatement(
-                statement.get(),
-                indentLevel + 1
-            );
+        for (const auto& statement : ifStmt->thenBody_) {
+            result += generateStatement(statement.get(), indentLevel + 1);
         }
+
+        popScope();
 
         result += indent(indentLevel) + "}";
 
         if (ifStmt->elseIf_) {
-
             result += " else ";
-
-            result += generateStatement(
-                ifStmt->elseIf_.get(),
-                0
-            );
-
+            result += generateStatement(ifStmt->elseIf_.get(), indentLevel);
             return result;
         }
 
@@ -123,13 +136,13 @@ std::string Transpiler::generateStatement(const Statement* stmt, int indentLevel
 
             result += " else {\n";
 
-            for (const auto& statement : ifStmt->elseBody_) {
+            pushScope();
 
-                result += generateStatement(
-                    statement.get(),
-                    indentLevel + 1
-                );
+            for (const auto& statement : ifStmt->elseBody_) {
+                result += generateStatement(statement.get(), indentLevel + 1);
             }
+
+            popScope();
 
             result += indent(indentLevel) + "}";
         }

@@ -1,9 +1,6 @@
-//
-// Created by maxmo on 5/29/2026.
-//
-
 #ifndef CSA_FINAL_TRANSPILER_H
 #define CSA_FINAL_TRANSPILER_H
+
 #include <memory>
 #include <string>
 #include <unordered_set>
@@ -13,20 +10,39 @@
 
 class Transpiler {
 public:
-    std::unordered_set<std::string> declaredVariables_;
-
-    explicit Transpiler(std::vector<std::unique_ptr<Statement>> statements) : statements_(std::move(statements)) {};
+    explicit Transpiler(std::vector<std::unique_ptr<Statement>> statements)
+        : statements_(std::move(statements)) {}
 
     std::string generateCPP();
+
 private:
     std::vector<std::unique_ptr<Statement>> statements_;
+    std::string functions;
 
-    std::string generateStatement(
-        const Statement* stmt,
-        int indentLevel
-    );
+    std::vector<std::unordered_set<std::string>> scopes_;
 
-    static std::string indent(int level) ;
+private:
+    std::string generateStatement(Statement* stmt, int indentLevel);
+    static std::string indent(int level);
+
+    void pushScope() {
+        scopes_.push_back({});
+    }
+
+    void popScope() {
+        scopes_.pop_back();
+    }
+
+    bool isDeclared(const std::string& name) {
+        for (auto it = scopes_.rbegin(); it != scopes_.rend(); ++it) {
+            if (it->contains(name)) return true;
+        }
+        return false;
+    }
+
+    void declare(const std::string& name) {
+        scopes_.back().insert(name);
+    }
 };
 
-#endif //CSA_FINAL_TRANSPILER_H
+#endif

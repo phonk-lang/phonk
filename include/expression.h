@@ -146,4 +146,48 @@ public:
     }
 };
 
+class CallExpression : public Expression {
+public:
+    std::string name_;
+    std::vector<std::unique_ptr<Expression>> args_;
+
+    CallExpression(
+        std::string name,
+        std::vector<std::unique_ptr<Expression>> args
+    )
+        : name_(std::move(name)),
+          args_(std::move(args)) {}
+
+    std::string toCPP() const override {
+
+        std::string result = name_ + "(";
+
+        for (size_t i = 0; i < args_.size(); i++) {
+
+            result += args_[i]->toCPP();
+
+            if (i + 1 < args_.size()) {
+                result += ", ";
+            }
+        }
+
+        result += ")";
+
+        return result;
+    }
+
+    std::string toString() const override {
+
+        std::string result = "(call " + name_;
+
+        for (const auto& arg : args_) {
+            result += " " + arg->toString();
+        }
+
+        result += ")";
+
+        return result;
+    }
+};
+
 #endif //CSA_FINAL_EXPRESSION_H

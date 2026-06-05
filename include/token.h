@@ -13,7 +13,7 @@ enum class TokenType {
     Identifier,
 
     // Keywords
-    Kw_Fn,
+    Kw_Phonk,
     Kw_Return,
     Kw_Returns,
     Kw_If,
@@ -74,9 +74,9 @@ struct Token {
                " }";
     }
 
-    static inline std::string tokenTypeToString(TokenType t) {
+    static inline std::string tokenTypeToString(const TokenType t) {
         switch (t) {
-            case TokenType::Kw_Fn:      return "Kw_Fn";
+            case TokenType::Kw_Phonk:   return "Kw_Phonk";
             case TokenType::Kw_Int:     return "Kw_Int";
             case TokenType::Kw_Bool:    return "Kw_Bool";
             case TokenType::Kw_Str:     return "Kw_Str";
