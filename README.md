@@ -203,7 +203,9 @@ Maxwell Morgan
 
 ## License
 
-License information coming soon.
+P.H.O.N.K. is licensed under both the Apache License (Version 2.0) and the MIT license.
+
+For more information, see [LICENSE-APACHE](LICENSE-APACHE) and [LICENSE-MIT](LICENSE-MIT).
 
 ---
 
