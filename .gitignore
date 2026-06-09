@@ -1,3 +1,13 @@
+# Executables
+*.exe
+*.out
+*.app
+
+# Build directories
+build/
+Build/
+build-*/
 cmake-build-debug/
 
+# Temp files
 .phonk
