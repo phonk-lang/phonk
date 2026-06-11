@@ -126,7 +126,7 @@ print(sum);
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/nano-maxwell/phonk
+git clone https://github.com/phonk-lang/phonk
 cd phonk
 ```
 
@@ -176,7 +176,7 @@ By targeting C++, P.H.O.N.K. can leverage decades of compiler optimizations whil
 
 ## Performance
 
-P.H.O.N.K. compiles directly to C++, allowing generated programs to benefit from native compiler optimizations.
+P.H.O.N.K. transpiles directly to C++, allowing generated programs to benefit from native compiler optimizations.
 
 > Note: Any benchmark numbers shown in demonstrations are illustrative and may not reflect real-world performance.
 
@@ -203,7 +203,9 @@ Maxwell Morgan
 
 ## License
 
-License information coming soon.
+P.H.O.N.K. is licensed under both the Apache License (Version 2.0) and the MIT license.
+
+For more information, see [LICENSE-APACHE](LICENSE-APACHE) and [LICENSE-MIT](LICENSE-MIT).
 
 ---
 
