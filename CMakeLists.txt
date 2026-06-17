@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.2)
+cmake_minimum_required(VERSION 3.20)
 project(phonk_lang)
 
 set(CMAKE_CXX_STANDARD 20)
