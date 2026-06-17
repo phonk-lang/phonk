@@ -1,6 +1,10 @@
 ## P.H.O.N.K.
 
-**Pythonic Syntax. C++ Speed. Zero Overhead.**
+![Tests](https://github.com/P-H-O-N-K/phonk/actions/workflows/tests.yml/badge.svg)
+![C++](https://img.shields.io/badge/C++-20-blue)
+![License](https://img.shields.io/badge/license-MIT%20%7C%20Apache%202.0-green)
+
+**Pythonic Syntax. C++ Speed. Low Overhead.**
 
 P.H.O.N.K. is a transpiled programming language that combines Python-inspired readability with the performance of native C++ binaries.
 
@@ -134,6 +138,19 @@ cd phonk
 
 ```bash
 # Build instructions coming soon
+```
+
+### Testing
+
+P.H.O.N.K. uses GoogleTest for automated testing.
+
+Run tests:
+
+```bash
+cmake -B build
+cmake --build build
+cd build
+ctest --output-on-failure
 ```
 
 ### Run
