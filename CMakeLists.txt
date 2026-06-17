@@ -19,26 +19,36 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(phonk_lang
-        include/Lexer.h
-        include/Token.h
         src/main.cpp
-        src/Lexer.cpp
-        include/error.h
-        include/Parser.h
-        include/expression.h
+
+        src/lexer.cpp
         src/parser.cpp
-        include/statement.h
         src/transpiler.cpp
+
+        include/lexer.h
+        include/token.h
+        include/error.h
+        include/parser.h
+        include/expression.h
+        include/statement.h
         include/transpiler.h
 )
+
 
 add_executable(phonk_lang_tests
         tests/lexer_tests.cpp
 
-        src/Lexer.cpp
+        src/lexer.cpp
+        src/parser.cpp
         src/transpiler.cpp
-        tests/lexer_tests.cpp
-        tests/lexer_tests.cpp
+
+        include/lexer.h
+        include/token.h
+        include/error.h
+        include/parser.h
+        include/expression.h
+        include/statement.h
+        include/transpiler.h
 )
 
 target_link_libraries(phonk_lang_tests
