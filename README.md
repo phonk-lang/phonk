@@ -1,10 +1,10 @@
 ## P.H.O.N.K.
 
 ![Tests](https://github.com/P-H-O-N-K/phonk/actions/workflows/tests.yml/badge.svg)
+![Release](https://img.shields.io/github/v/release/P-H-O-N-K/phonk?include_prereleases)
 ![C++](https://img.shields.io/badge/C++-20-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT%20%7C%20Apache--2.0-green.svg)
 ![Last Commit](https://img.shields.io/github/last-commit/P-H-O-N-K/phonk.svg)
-![Repo Size](https://img.shields.io/github/repo-size/P-H-O-N-K/phonk.svg)
 
 **Pythonic Syntax. C++ Speed. Low Overhead.**
 
