@@ -6,7 +6,8 @@
 
 #include "error.h"
 
-Parser::Parser(const std::vector<Token> &tokens) : tokens_(tokens), pos_(0) {}
+Parser::Parser(const std::vector<Token> &tokens) : tokens_(tokens), pos_(0) {
+}
 
 Token Parser::current() const {
     return tokens_.at(pos_);
@@ -25,7 +26,7 @@ Token Parser::advance() {
 }
 
 std::vector<std::unique_ptr<Statement> > Parser::parse() {
-    std::vector<std::unique_ptr<Statement>> statements;
+    std::vector<std::unique_ptr<Statement> > statements;
 
     while (!isAtEnd()) {
         statements.push_back(parseStatement());
@@ -35,11 +36,9 @@ std::vector<std::unique_ptr<Statement> > Parser::parse() {
 }
 
 std::unique_ptr<Expression> Parser::parseOr() {
-
     auto expr = parseAnd();
 
     while (current().type == TokenType::Kw_Or) {
-
         Token op = advance();
 
         auto right = parseAnd();
@@ -55,11 +54,9 @@ std::unique_ptr<Expression> Parser::parseOr() {
 }
 
 std::unique_ptr<Expression> Parser::parseAnd() {
-
     auto expr = parseComparison();
 
     while (current().type == TokenType::Kw_And) {
-
         Token op = advance();
 
         auto right = parseComparison();
@@ -75,18 +72,16 @@ std::unique_ptr<Expression> Parser::parseAnd() {
 }
 
 std::unique_ptr<Expression> Parser::parseComparison() {
-
     auto expr = parseArithmetic();
 
     while (
-        current().type == TokenType::Eq   ||
+        current().type == TokenType::Eq ||
         current().type == TokenType::N_Eq ||
-        current().type == TokenType::Lt   ||
-        current().type == TokenType::Gt   ||
-        current().type == TokenType::Lte  ||
+        current().type == TokenType::Lt ||
+        current().type == TokenType::Gt ||
+        current().type == TokenType::Lte ||
         current().type == TokenType::Gte
     ) {
-
         Token op = advance();
 
         auto right = parseArithmetic();
@@ -125,7 +120,8 @@ std::unique_ptr<Expression> Parser::parseArithmetic() {
 std::unique_ptr<Expression> Parser::parseTerm() {
     auto expr = parsePrimary();
 
-    while (current().type == TokenType::Star || current().type == TokenType::Slash || current().type == TokenType::Percent) {
+    while (current().type == TokenType::Star || current().type == TokenType::Slash || current().type ==
+           TokenType::Percent) {
         Token op = advance();
 
         auto right = parsePrimary();
@@ -138,7 +134,6 @@ std::unique_ptr<Expression> Parser::parseTerm() {
 
 std::unique_ptr<Expression> Parser::parsePrimary() {
     if (current().type == TokenType::Kw_Not) {
-
         Token op = advance();
 
         auto expr = parsePrimary();
@@ -155,7 +150,6 @@ std::unique_ptr<Expression> Parser::parsePrimary() {
         auto expr = parseOr();
 
         if (current().type != TokenType::R_Paren) {
-
             throw ParserError(current().line, current().col, "expected ')'");
         }
 
@@ -175,21 +169,18 @@ std::unique_ptr<Expression> Parser::parsePrimary() {
     }
 
     if (const Token token = current();
-    token.type == TokenType::Identifier) {
-
+        token.type == TokenType::Identifier) {
         advance();
 
         if (current().type == TokenType::L_Paren) {
-
             advance();
 
-            std::vector<std::unique_ptr<Expression>> args;
+            std::vector<std::unique_ptr<Expression> > args;
 
             while (
                 !isAtEnd() &&
                 current().type != TokenType::R_Paren
             ) {
-
                 args.push_back(parseOr());
 
                 if (current().type == TokenType::Comma) {
@@ -220,7 +211,6 @@ std::unique_ptr<Expression> Parser::parsePrimary() {
 
     if (const Token token = current();
         token.type == TokenType::String_Lit) {
-
         advance();
 
         return std::make_unique<StringExpression>(token.value);
@@ -235,7 +225,6 @@ std::unique_ptr<Expression> Parser::parsePrimary() {
 }
 
 std::unique_ptr<Statement> Parser::parseStatement() {
-
     if (current().type == TokenType::Kw_Phonk) {
         return parseFunctionStatement();
     }
@@ -253,7 +242,6 @@ std::unique_ptr<Statement> Parser::parseStatement() {
     }
 
     if (current().type == TokenType::Identifier) {
-
         Token identifier = advance();
 
         if (current().type != TokenType::Assign) {
@@ -319,8 +307,8 @@ std::unique_ptr<Statement> Parser::parseStatement() {
     throw ParserError(current().line, current().col, "unknown expression");
 }
 
-std::vector<std::unique_ptr<Statement>> Parser::parseBlock() {
-    std::vector<std::unique_ptr<Statement>> statements;
+std::vector<std::unique_ptr<Statement> > Parser::parseBlock() {
+    std::vector<std::unique_ptr<Statement> > statements;
 
     while (
         !isAtEnd() &&
@@ -336,7 +324,6 @@ std::vector<std::unique_ptr<Statement>> Parser::parseBlock() {
 }
 
 std::unique_ptr<Statement> Parser::parseIfStatement() {
-
     advance(); // consume 'if'
 
     if (current().type != TokenType::L_Paren) {
@@ -383,26 +370,23 @@ std::unique_ptr<Statement> Parser::parseIfStatement() {
 
     advance(); // consume '}'
 
-    std::vector<std::unique_ptr<Statement>> elseBody;
+    std::vector<std::unique_ptr<Statement> > elseBody;
     std::unique_ptr<IfStatement> elseIf = nullptr;
 
     if (current().type == TokenType::Kw_Else) {
-
         advance(); // consume 'else'
 
         // else if (...)
         if (current().type == TokenType::Kw_If) {
-
             auto stmt = parseIfStatement();
 
             elseIf.reset(
-                dynamic_cast<IfStatement*>(stmt.release())
+                dynamic_cast<IfStatement *>(stmt.release())
             );
         }
 
         // else { ... }
         else {
-
             if (current().type != TokenType::L_Brace) {
                 throw ParserError(
                     current().line,
@@ -486,7 +470,6 @@ std::unique_ptr<Statement> Parser::parseWhileStatement() {
 }
 
 std::unique_ptr<Statement> Parser::parseFunctionStatement() {
-
     advance(); // phonk
 
     if (current().type != TokenType::Identifier) {
@@ -515,7 +498,6 @@ std::unique_ptr<Statement> Parser::parseFunctionStatement() {
         !isAtEnd() &&
         current().type != TokenType::R_Paren
     ) {
-
         if (current().type != TokenType::Identifier) {
             throw ParserError(
                 current().line,
@@ -565,7 +547,6 @@ std::unique_ptr<Statement> Parser::parseFunctionStatement() {
 }
 
 std::unique_ptr<Statement> Parser::parseReturnStatement() {
-
     advance();
 
     auto expr = parseOr();

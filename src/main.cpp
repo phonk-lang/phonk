@@ -12,27 +12,27 @@
 #include "token.h"
 #include "transpiler.h"
 
-void printTokens(const std::vector<Token>& tokens) {
-    for (const auto& tok : tokens) {
+void printTokens(const std::vector<Token> &tokens) {
+    for (const auto &tok: tokens) {
         std::cout << "Line " << tok.line
-                  << " | " << Token::tokenTypeToString(tok.type) << "\n"
-                  << " | '" << tok.value << "'\n";
+                << " | " << Token::tokenTypeToString(tok.type) << "\n"
+                << " | '" << tok.value << "'\n";
     }
 }
 
-void runTest(const std::string& label, const std::string& source) {
+void runTest(const std::string &label, const std::string &source) {
     std::cout << "\n=== " << label << " ===\n";
     try {
         Lexer lexer(source);
         const auto tokens = lexer.tokenize();
         printTokens(tokens);
-    } catch (std::exception& e) {
+    } catch (std::exception &e) {
         std::cout << "ERROR: " << e.what() << "\n";
     }
 }
 
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     // // Test 1: keywords and identifiers
     // runTest("Keywords", "int bool str if else for fn returns");
     //
@@ -121,42 +121,41 @@ int main(int argc, char* argv[]) {
     std::cout << "Tokens: " << tokens.size() << '\n';
 
     std::cout << "Lexer: "
-              << std::chrono::duration_cast<std::chrono::microseconds>(
-                     lexEnd - lexStart
-                 ).count()
-              << " us\n";
+            << std::chrono::duration_cast<std::chrono::microseconds>(
+                lexEnd - lexStart
+            ).count()
+            << " us\n";
 
     std::cout << "Parser: "
-              << std::chrono::duration_cast<std::chrono::microseconds>(
-                     parseEnd - parseStart
-                 ).count()
-              << " us\n";
+            << std::chrono::duration_cast<std::chrono::microseconds>(
+                parseEnd - parseStart
+            ).count()
+            << " us\n";
 
     std::cout << "Transpiler: "
-              << std::chrono::duration_cast<std::chrono::microseconds>(
-                     transpileEnd - transpileStart
-                 ).count()
-              << " us\n";
+            << std::chrono::duration_cast<std::chrono::microseconds>(
+                transpileEnd - transpileStart
+            ).count()
+            << " us\n";
 
     std::cout << "Frontend Compiler: "
-              << std::chrono::duration_cast<std::chrono::microseconds>(
-                     transpileEnd - totalStart
-                 ).count()
-              << " us\n";
-
+            << std::chrono::duration_cast<std::chrono::microseconds>(
+                transpileEnd - totalStart
+            ).count()
+            << " us\n";
 
 
     std::cout << "g++: "
-              << std::chrono::duration_cast<std::chrono::milliseconds>(
-                     compileEnd - compileStart
-                 ).count()
-              << " ms\n";
+            << std::chrono::duration_cast<std::chrono::milliseconds>(
+                compileEnd - compileStart
+            ).count()
+            << " ms\n";
 
     std::cout << "Total: "
-              << std::chrono::duration_cast<std::chrono::milliseconds>(
-                     totalEnd - totalStart
-                 ).count()
-              << " ms\n";
+            << std::chrono::duration_cast<std::chrono::milliseconds>(
+                totalEnd - totalStart
+            ).count()
+            << " ms\n";
 
     return 0;
 }

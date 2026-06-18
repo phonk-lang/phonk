@@ -49,6 +49,7 @@ add_executable(phonk_lang_tests
         include/expression.h
         include/statement.h
         include/transpiler.h
+        tests/parser_tests.cpp
 )
 
 target_link_libraries(phonk_lang_tests

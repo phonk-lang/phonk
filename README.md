@@ -1,4 +1,4 @@
-## P.H.O.N.K.
+# P.H.O.N.K.
 
 ![Tests](https://github.com/P-H-O-N-K/phonk/actions/workflows/tests.yml/badge.svg)
 ![Release](https://img.shields.io/github/v/release/P-H-O-N-K/phonk?include_prereleases)
