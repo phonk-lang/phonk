@@ -2,8 +2,8 @@
 // Created by maxmo on 5/22/2026.
 //
 
-#ifndef CSA_FINAL_LEXER_ERROR_H
-#define CSA_FINAL_LEXER_ERROR_H
+#ifndef PHONK_LANG_ERROR_H
+#define PHONK_LANG_ERROR_H
 #include <string>
 #include <stdexcept>
 
@@ -39,4 +39,4 @@ private:
     }
 };
 
-#endif //CSA_FINAL_LEXER_ERROR_H
+#endif //PHONK_LANG_ERROR_H

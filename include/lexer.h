@@ -2,8 +2,8 @@
 // Created by maxmo on 5/22/2026.
 //
 
-#ifndef CSA_FINAL_LEXER_H
-#define CSA_FINAL_LEXER_H
+#ifndef PHONK_LANG_LEXER_H
+#define PHONK_LANG_LEXER_H
 #include <vector>
 
 #include "token.h"
@@ -35,4 +35,4 @@ private:
     Token readIdentifierOrKeyword();
 };
 
-#endif //CSA_FINAL_LEXER_H
+#endif //PHONK_LANG_LEXER_H

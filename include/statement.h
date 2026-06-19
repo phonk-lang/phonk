@@ -2,8 +2,8 @@
 // Created by maxmo on 5/27/2026.
 //
 
-#ifndef CSA_FINAL_STATEMENT_H
-#define CSA_FINAL_STATEMENT_H
+#ifndef PHONK_LANG_STATEMENT_H
+#define PHONK_LANG_STATEMENT_H
 #include <memory>
 #include <string>
 
@@ -234,4 +234,4 @@ public:
     }
 };
 
-#endif //CSA_FINAL_STATEMENT_H
+#endif //PHONK_LANG_STATEMENT_H

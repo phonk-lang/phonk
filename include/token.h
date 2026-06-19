@@ -2,8 +2,8 @@
 // Created by maxmo on 5/22/2026.
 //
 
-#ifndef CSA_FINAL_TOKEN_H
-#define CSA_FINAL_TOKEN_H
+#ifndef PHONK_LANG_TOKEN_H
+#define PHONK_LANG_TOKEN_H
 #include <string>
 
 enum class TokenType {
@@ -117,4 +117,4 @@ struct Token {
     }
 };
 
-#endif //CSA_FINAL_TOKEN_H
+#endif //PHONK_LANG_TOKEN_H

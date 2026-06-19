@@ -21,12 +21,12 @@ std::string Transpiler::generateCPP() {
             "}";
 }
 
-std::string Transpiler::indent(int level) {
+std::string Transpiler::indent(const int level) {
     return std::string(level * 4, ' ');
 }
 
-std::string Transpiler::generateStatement(Statement *stmt, int indentLevel) {
-    if (auto fn = dynamic_cast<FunctionStatement *>(stmt)) {
+std::string Transpiler::generateStatement(Statement *stmt, const int indentLevel) {
+    if (const auto fn = dynamic_cast<FunctionStatement *>(stmt)) {
         std::string result = "auto " + fn->name_ + "(";
 
         for (size_t i = 0; i < fn->params_.size(); i++) {

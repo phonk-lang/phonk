@@ -2,8 +2,8 @@
 // Created by maxmo on 5/26/2026.
 //
 
-#ifndef CSA_FINAL_PARSER_H
-#define CSA_FINAL_PARSER_H
+#ifndef PHONK_LANG_PARSER_H
+#define PHONK_LANG_PARSER_H
 
 #include <vector>
 #include <memory>
@@ -97,4 +97,4 @@ private:
     std::unique_ptr<Statement> parseReturnStatement();
 };
 
-#endif //CSA_FINAL_PARSER_H
+#endif //PHONK_LANG_PARSER_H
