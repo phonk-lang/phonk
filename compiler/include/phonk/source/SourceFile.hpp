@@ -8,7 +8,7 @@
 
 namespace phonk::source {
 /**
- * Represents the source files for the P.H.O.N.K. programming language (.phonk).
+ * Represents a source file written in the P.H.O.N.K. programming language (.phonk).
  */
 class SourceFile {
 public:
