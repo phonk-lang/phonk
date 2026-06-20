@@ -294,6 +294,24 @@ TEST(LexerTests, TokenizesPercent) {
     EXPECT_EQ(tokens[1].type, TokenType::Eof_Token);
 }
 
+TEST(LexerTests, TokenizesIncrement) {
+    Lexer lexer("++");
+    const auto tokens = lexer.tokenize();
+
+    ASSERT_EQ(tokens.size(), 2);
+    EXPECT_EQ(tokens[0].type, TokenType::Increment);
+    EXPECT_EQ(tokens[1].type, TokenType::Eof_Token);
+}
+
+TEST(LexerTests, TokenizesDecrement) {
+    Lexer lexer("--");
+    const auto tokens = lexer.tokenize();
+
+    ASSERT_EQ(tokens.size(), 2);
+    EXPECT_EQ(tokens[0].type, TokenType::Decrement);
+    EXPECT_EQ(tokens[1].type, TokenType::Eof_Token);
+}
+
 TEST(LexerTests, TokenizesLeftParen) {
     Lexer lexer("(");
     const auto tokens = lexer.tokenize();

@@ -35,6 +35,8 @@ enum class TokenType {
     Star,
     Slash,
     Percent,
+    Increment,
+    Decrement,
 
     // Symbols
     L_Paren,

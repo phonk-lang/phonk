@@ -3,7 +3,7 @@
 //
 
 #include <gtest/gtest.h>
-#include "error.h"
+
 #include "lexer.h"
 #include "parser.h"
 #include "statement.h"
@@ -74,4 +74,61 @@ TEST(ParserTests, ParsesAddition) {
         ast[0]->toString(),
         "(assign x (+ 5 3))"
     );
+}
+
+TEST(ParserTests, ParsesSubtraction) {
+    const auto ast = parseProgram(
+        "x = 8 - 2;"
+    );
+
+    EXPECT_EQ(
+        ast[0]->toString(),
+        "(assign x (- 8 2))"
+    );
+}
+
+
+TEST(ParserTests, ParsesMultiplication) {
+    const auto ast = parseProgram(
+        "x = 2 * 4;"
+    );
+
+    EXPECT_EQ(
+        ast[0]->toString(),
+        "(assign x (* 2 4))"
+    );
+}
+
+TEST(ParserTests, ParsesDivision) {
+    const auto ast = parseProgram(
+        "x = 9 / 3;"
+    );
+
+    EXPECT_EQ(
+        ast[0]->toString(),
+        "(assign x (/ 9 3))"
+    );
+}
+
+TEST(ParserTests, ParsesModulus) {
+    const auto ast = parseProgram(
+        "x = 7 % 2;"
+    );
+
+    EXPECT_EQ(
+        ast[0]->toString(),
+        "(assign x (% 7 2))"
+    );
+}
+
+TEST(ParserTests, ParsesIncrementStatement) {
+    const auto ast = parseProgram("x++;");
+    ASSERT_EQ(ast.size(), 1);
+    EXPECT_EQ(ast[0]->toString(), "(inc x)");
+}
+
+TEST(ParserTests, ParsesDecrementStatement) {
+    const auto ast = parseProgram("x--;");
+    ASSERT_EQ(ast.size(), 1);
+    EXPECT_EQ(ast[0]->toString(), "(dec x)");
 }

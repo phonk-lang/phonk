@@ -244,6 +244,28 @@ std::unique_ptr<Statement> Parser::parseStatement() {
     if (current().type == TokenType::Identifier) {
         Token identifier = advance();
 
+        if (
+            current().type == TokenType::Increment ||
+            current().type == TokenType::Decrement
+        ) {
+            const Token op = advance();
+
+            if (current().type != TokenType::Semicolon) {
+                throw ParserError(
+                    current().line,
+                    current().col,
+                    "expected ';'"
+                );
+            }
+
+            advance();
+
+            return std::make_unique<IncrementStatement>(
+                identifier.value,
+                op.type == TokenType::Increment
+            );
+        }
+
         if (current().type != TokenType::Assign) {
             throw ParserError(
                 current().line,

@@ -199,9 +199,21 @@ std::vector<Token> Lexer::tokenize() {
                 break;
             case ',': tokens.push_back(makeToken(TokenType::Comma, ",", token_col));
                 break;
-            case '+': tokens.push_back(makeToken(TokenType::Plus, "+", token_col));
+            case '+':
+                if (current() == '+') {
+                    advance();
+                    tokens.push_back(makeToken(TokenType::Increment, "++", token_col));
+                } else {
+                    tokens.push_back(makeToken(TokenType::Plus, "+", token_col));
+                }
                 break;
-            case '-': tokens.push_back(makeToken(TokenType::Minus, "-", token_col));
+            case '-':
+                if (current() == '-') {
+                    advance();
+                    tokens.push_back(makeToken(TokenType::Decrement, "--", token_col));
+                } else {
+                    tokens.push_back(makeToken(TokenType::Minus, "-", token_col));
+                }
                 break;
             case '*': tokens.push_back(makeToken(TokenType::Star, "*", token_col));
                 break;

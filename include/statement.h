@@ -234,4 +234,25 @@ public:
     }
 };
 
+class IncrementStatement : public Statement {
+public:
+    std::string identifier_;
+    bool increment_;
+
+    IncrementStatement(std::string identifier, const bool increment)
+        : identifier_(std::move(identifier)),
+          increment_(increment) {
+    }
+
+    std::string toCPP() const override {
+        return identifier_ + (increment_ ? "++" : "--");
+    }
+
+    std::string toString() const override {
+        return std::string(increment_ ? "(inc " : "(dec ") +
+               identifier_ +
+               ")";
+    }
+};
+
 #endif //PHONK_LANG_STATEMENT_H

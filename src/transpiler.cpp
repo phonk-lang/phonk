@@ -51,14 +51,20 @@ std::string Transpiler::generateStatement(Statement *stmt, const int indentLevel
         return "";
     }
 
-    if (auto ret = dynamic_cast<ReturnStatement *>(stmt)) {
+    if (const auto inc = dynamic_cast<IncrementStatement *>(stmt)) {
+        return indent(indentLevel) +
+               inc->toCPP() +
+               ";\n";
+    }
+
+    if (const auto ret = dynamic_cast<ReturnStatement *>(stmt)) {
         return indent(indentLevel) +
                "return " +
                ret->expr_->toCPP() +
                ";\n";
     }
 
-    if (auto assign = dynamic_cast<AssignmentStatement *>(stmt)) {
+    if (const auto assign = dynamic_cast<AssignmentStatement *>(stmt)) {
         if (!isDeclared(assign->identifier_)) {
             declare(assign->identifier_);
             return indent(indentLevel) +
@@ -76,14 +82,14 @@ std::string Transpiler::generateStatement(Statement *stmt, const int indentLevel
                ";\n";
     }
 
-    if (auto print = dynamic_cast<PrintStatement *>(stmt)) {
+    if (const auto print = dynamic_cast<PrintStatement *>(stmt)) {
         return indent(indentLevel) +
                "std::cout << " +
                print->expression_->toCPP() +
                " << std::endl;\n";
     }
 
-    if (auto loop = dynamic_cast<WhileStatement *>(stmt)) {
+    if (const auto loop = dynamic_cast<WhileStatement *>(stmt)) {
         std::string result =
                 indent(indentLevel) +
                 "while (" +
@@ -103,7 +109,7 @@ std::string Transpiler::generateStatement(Statement *stmt, const int indentLevel
         return result;
     }
 
-    if (auto ifStmt = dynamic_cast<IfStatement *>(stmt)) {
+    if (const auto ifStmt = dynamic_cast<IfStatement *>(stmt)) {
         std::string result =
                 indent(indentLevel) +
                 "if (" +
