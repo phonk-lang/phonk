@@ -1,0 +1,40 @@
+# Build
+build/
+cmake-build-*/
+out/
+
+# CLion
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# Compiled files
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.a
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+install_manifest.txt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Compiler outputs
+*.phonk.out
+*.cpp.generated
+
+# Logs
+*.log
+
+# Temporary
+tmp/
+temp/
