@@ -7,6 +7,7 @@
 #include <string>
 
 namespace phonk::source {
+
 /**
  * Represents a source file written in the P.H.O.N.K. programming language (.phonk).
  */
@@ -22,6 +23,7 @@ private:
     std::string name_;
     std::string content_;
 };
+
 }
 
 #endif //PHONK_SOURCEFILE_HPP

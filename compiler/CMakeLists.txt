@@ -6,6 +6,9 @@ add_executable(phonk
         src/diagnostics/Diagnostic.cpp
         src/diagnostics/DiagnosticEngine.cpp
         include/phonk/diagnostics/DiagnosticEngine.hpp
+        include/phonk/lexer/Token.hpp
+        src/lexer/Lexer.cpp
+        include/phonk/lexer/Lexer.hpp
 )
 
 target_include_directories(phonk PRIVATE include)
