@@ -5,7 +5,7 @@
 #ifndef PHONK_TOKEN_HPP
 #define PHONK_TOKEN_HPP
 #include <string>
-#include <phonk/source/SourceLocation.hpp>
+#include <phonk/source/SourceRange.hpp>
 
 namespace phonk::lexer {
 
@@ -52,7 +52,7 @@ enum class TokenType {
 struct Token {
     TokenType type;
     std::string lexeme;
-    source::SourceLocation location;
+    source::SourceRange range;
 };
 
 }
