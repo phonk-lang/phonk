@@ -9,6 +9,7 @@ add_executable(phonk
         include/phonk/lexer/Token.hpp
         src/lexer/Lexer.cpp
         include/phonk/lexer/Lexer.hpp
+        include/phonk/source/SourceRange.hpp
 )
 
 target_include_directories(phonk PRIVATE include)

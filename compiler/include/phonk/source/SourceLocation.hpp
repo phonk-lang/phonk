@@ -5,8 +5,7 @@
 namespace phonk::source {
 
 struct SourceLocation {
-    size_t line;
-    size_t col;
+    size_t offset;
 };
 
 }
