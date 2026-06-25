@@ -2,8 +2,8 @@
 // Created by maxmo on 6/20/2026.
 //
 
-#ifndef PHONK_DIAGNOSTICENGINE_HPP
-#define PHONK_DIAGNOSTICENGINE_HPP
+#ifndef PHONK_DIAGNOSTIC_ENGINE_HPP
+#define PHONK_DIAGNOSTIC_ENGINE_HPP
 #include <vector>
 #include <phonk/diagnostics/diagnostic.hpp>
 
@@ -16,9 +16,9 @@ public:
     bool hasErrors() const;
 
 private:
-    std::vector<diagnostic> diagnostics_;
+    std::vector<Diagnostic> diagnostics_;
 };
 
 }
 
-#endif //PHONK_DIAGNOSTICENGINE_HPP
+#endif //PHONK_DIAGNOSTIC_ENGINE_HPP
