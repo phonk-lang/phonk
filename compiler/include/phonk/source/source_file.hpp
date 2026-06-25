@@ -2,8 +2,8 @@
 // Created by maxmo on 6/20/2026.
 //
 
-#ifndef PHONK_SOURCEFILE_HPP
-#define PHONK_SOURCEFILE_HPP
+#ifndef PHONK_SOURCE_FILE_HPP
+#define PHONK_SOURCE_FILE_HPP
 #include <string>
 
 namespace phonk::source {
@@ -26,4 +26,4 @@ private:
 
 }
 
-#endif //PHONK_SOURCEFILE_HPP
+#endif //PHONK_SOURCE_FILE_HPP

@@ -4,7 +4,7 @@
 
 #ifndef PHONK_DIAGNOSTIC_HPP
 #define PHONK_DIAGNOSTIC_HPP
-#include <phonk/source/SourceLocation.hpp>
+#include <phonk/source/source_location.hpp>
 
 #include <string>
 

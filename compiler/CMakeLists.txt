@@ -1,15 +1,15 @@
 add_executable(phonk
         src/main.cpp
-        src/source/SourceFile.cpp
-        include/phonk/source/SourceLocation.hpp
+        src/source/source_file.cpp
+        include/phonk/source/source_location.hpp
         include/phonk/diagnostics/Diagnostic.hpp
         src/diagnostics/Diagnostic.cpp
-        src/diagnostics/DiagnosticEngine.cpp
-        include/phonk/diagnostics/DiagnosticEngine.hpp
+        src/diagnostics/diagnostic_engine.cpp
+        include/phonk/diagnostics/diagnostic_engine.hpp
         include/phonk/lexer/Token.hpp
         src/lexer/Lexer.cpp
         include/phonk/lexer/Lexer.hpp
-        include/phonk/source/SourceRange.hpp
+        include/phonk/source/source_range.hpp
 )
 
 target_include_directories(phonk PRIVATE include)

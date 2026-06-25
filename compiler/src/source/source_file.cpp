@@ -4,7 +4,7 @@
 
 #include <utility>
 
-#include <phonk/source/SourceFile.hpp>
+#include <phonk/source/source_file.hpp>
 
 namespace phonk::source {
 

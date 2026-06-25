@@ -2,9 +2,9 @@
 // Created by maxmo on 6/21/2026.
 //
 
-#ifndef PHONK_SOURCERANGE_HPP
-#define PHONK_SOURCERANGE_HPP
-#include <phonk/source/SourceLocation.hpp>
+#ifndef PHONK_SOURCE_RANGE_HPP
+#define PHONK_SOURCE_RANGE_HPP
+#include <phonk/source/source_location.hpp>
 
 namespace phonk::source {
 
@@ -15,4 +15,4 @@ struct SourceRange {
 
 }
 
-#endif //PHONK_SOURCERANGE_HPP
+#endif //PHONK_SOURCE_RANGE_HPP

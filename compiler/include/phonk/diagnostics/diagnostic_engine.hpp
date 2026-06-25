@@ -5,7 +5,7 @@
 #ifndef PHONK_DIAGNOSTICENGINE_HPP
 #define PHONK_DIAGNOSTICENGINE_HPP
 #include <vector>
-#include <phonk/diagnostics/Diagnostic.hpp>
+#include <phonk/diagnostics/diagnostic.hpp>
 
 namespace phonk::diagnostics {
 
@@ -16,7 +16,7 @@ public:
     bool hasErrors() const;
 
 private:
-    std::vector<Diagnostic> diagnostics_;
+    std::vector<diagnostic> diagnostics_;
 };
 
 }

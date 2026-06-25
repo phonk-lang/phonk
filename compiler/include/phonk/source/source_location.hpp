@@ -1,5 +1,5 @@
-#ifndef PHONK_SOURCELOCATION_HPP
-#define PHONK_SOURCELOCATION_HPP
+#ifndef PHONK_SOURCE_LOCATION_HPP
+#define PHONK_SOURCE_LOCATION_HPP
 #include <cstddef>
 
 namespace phonk::source {

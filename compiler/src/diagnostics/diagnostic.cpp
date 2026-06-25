@@ -2,7 +2,7 @@
 // Created by maxmo on 6/20/2026.
 //
 
-#include <phonk/diagnostics/Diagnostic.hpp>
+#include <phonk/diagnostics/diagnostic.hpp>
 
 namespace phonk::diagnostics {
 

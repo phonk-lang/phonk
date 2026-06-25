@@ -5,7 +5,7 @@
 #ifndef PHONK_TOKEN_HPP
 #define PHONK_TOKEN_HPP
 #include <string>
-#include <phonk/source/SourceRange.hpp>
+#include <phonk/source/source_range.hpp>
 
 namespace phonk::lexer {
 

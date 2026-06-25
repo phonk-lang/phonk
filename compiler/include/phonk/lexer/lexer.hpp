@@ -5,8 +5,8 @@
 #ifndef PHONK_LEXER_HPP
 #define PHONK_LEXER_HPP
 #include <vector>
-#include <phonk/lexer/Token.hpp>
-#include <phonk/source/SourceFile.hpp>
+#include <phonk/lexer/token.hpp>
+#include <phonk/source/source_file.hpp>
 
 namespace phonk::lexer {
 
