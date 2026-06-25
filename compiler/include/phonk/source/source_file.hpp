@@ -4,6 +4,8 @@
 
 #ifndef PHONK_SOURCE_FILE_HPP
 #define PHONK_SOURCE_FILE_HPP
+#include <filesystem>
+#include <optional>
 #include <string>
 
 namespace phonk::source {
@@ -13,14 +15,19 @@ namespace phonk::source {
  */
 class SourceFile {
 public:
-    SourceFile(std::string name, std::string content);
+    explicit SourceFile(std::string name, std::string content);
+
+    explicit SourceFile(const std::filesystem::path& path);
 
     const std::string& getName() const;
+
+    const std::optional<std::filesystem::path>& getPath() const;
 
     const std::string& getContent() const;
 
 private:
     std::string name_;
+    std::optional<std::filesystem::path> path_;
     std::string content_;
 };
 
