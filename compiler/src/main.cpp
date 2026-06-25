@@ -3,9 +3,12 @@
 //
 
 #include <iostream>
+#include <phonk/compiler.hpp>
 
 int main() {
-    std::cout << "P.H.O.N.K. compiler starting...\n";
+    phonk::Compiler compiler;
 
-    return 0;
+    compiler.addVirtualFile("test.phonk", "print(\"Hello World\"");
+
+    return compiler.compile();
 }

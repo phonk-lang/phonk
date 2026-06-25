@@ -10,6 +10,8 @@ add_executable(phonk
         src/lexer/lexer.cpp
         include/phonk/lexer/lexer.hpp
         include/phonk/source/source_range.hpp
+        src/compiler.cpp
+        include/phonk/compiler.hpp
 )
 
 target_include_directories(phonk PRIVATE include)
