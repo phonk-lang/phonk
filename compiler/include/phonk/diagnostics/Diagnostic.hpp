@@ -24,9 +24,9 @@ public:
 
     Severity getSeverity() const;
 
-    std::string getMessage() const;
+    const std::string& getMessage() const;
 
-    source::SourceLocation getLocation() const;
+    const source::SourceLocation& getLocation() const;
 
 private:
     Severity severity_;
