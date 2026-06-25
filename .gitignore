@@ -28,10 +28,6 @@ install_manifest.txt
 .DS_Store
 Thumbs.db
 
-# Compiler outputs
-*.phonk.out
-*.cpp.generated
-
 # Logs
 *.log
 
