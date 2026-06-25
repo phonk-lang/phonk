@@ -17,7 +17,7 @@ Severity Diagnostic::getSeverity() const {
     return severity_;
 }
 
-std::string Diagnostic::getMessage() const {
+const std::string& Diagnostic::getMessage() const {
     return message_;
 }
 
