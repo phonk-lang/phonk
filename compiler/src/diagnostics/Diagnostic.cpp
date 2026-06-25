@@ -21,7 +21,7 @@ std::string Diagnostic::getMessage() const {
     return message_;
 }
 
-source::SourceLocation Diagnostic::getLocation() const {
+const source::SourceLocation& Diagnostic::getLocation() const {
     return location_;
 }
 
