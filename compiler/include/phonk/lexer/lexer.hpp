@@ -33,15 +33,12 @@ public:
     std::vector<Token> tokenize();
 
 private:
-    struct Cursor {
-        std::size_t offset = 0;
-    };
-
     const source::SourceFile& source_;
     std::string_view input_;
     diagnostics::DiagnosticEngine* diagnosticEngine_;
     LexerOptions options_;
-    Cursor cursor_;
+
+    size_t offset_ = 0;
 
     char current() const;
 
@@ -71,9 +68,9 @@ private:
 
     Token readOperatorOrPunctuation();
 
-    Token makeToken(TokenType type, source::SourceLocation begin) const;
+    Token makeToken(TokenType type, const source::SourceLocation& begin) const;
 
-    void reportError(std::string message, source::SourceLocation location);
+    void reportError(const std::string& message, const source::SourceLocation& location) const;
 
     static TokenType keywordType(std::string_view text);
 };

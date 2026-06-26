@@ -53,6 +53,24 @@ enum class TokenType {
     Comma,
     Colon,
     Dot,
+
+    Kw_Phonk,
+    Kw_Return,
+    Kw_Returns,
+    Kw_If,
+    Kw_Else,
+    Kw_For,
+    Kw_While,
+    Kw_Break,
+    Kw_True,
+    Kw_False,
+    Kw_Bool,
+    Kw_Int,
+    Kw_Float,
+    Kw_Str,
+    Kw_And,
+    Kw_Or,
+    Kw_Not,
 };
 
 struct Token {
