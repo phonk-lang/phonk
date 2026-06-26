@@ -6,7 +6,7 @@
 
 namespace phonk::diagnostics {
 
-void DiagnosticEngine::report(Severity severity, std::string& message,
+void DiagnosticEngine::report(Severity severity, const std::string& message,
                               source::SourceLocation location) {
     diagnostics_.emplace_back(severity, message, location);
 }

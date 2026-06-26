@@ -11,42 +11,48 @@ namespace phonk::lexer {
 
 enum class TokenType {
     Unknown,
+    EndOfFile,
+
     Identifier,
 
-    // Literals
-    NumericLiteral,
+    IntegerLiteral,
+    FloatLiteral,
     StringLiteral,
     BooleanLiteral,
 
-    // Operators
     Plus,
     Minus,
     Star,
     Slash,
     Percent,
-    Increment, // ++
-    Decrement, // --
-    Eq, // ==
-    Bang, // !
-    Gt, // >
-    Lt, // <
-    Gte, // >=
-    Lte, // <=
 
-    // Symbols
+    PlusPlus,
+    MinusMinus,
+
+    Equal,
+    EqualEqual,
+    Bang,
+    BangEqual,
+
+    Greater,
+    GreaterEqual,
+    Less,
+    LessEqual,
+
+    AndAnd,
+    OrOr,
+
     OpenParen,
     CloseParen,
     OpenBrace,
     CloseBrace,
     OpenBracket,
     CloseBracket,
+
     Semicolon,
     Comma,
     Colon,
-    Assign,
     Dot,
-
-    Eof
 };
 
 struct Token {

@@ -11,7 +11,7 @@ namespace phonk::diagnostics {
 
 class DiagnosticEngine {
 public:
-    void report(Severity severity, std::string& message, source::SourceLocation location);
+    void report(Severity severity, const std::string& message, source::SourceLocation location);
 
     bool hasErrors() const;
 
