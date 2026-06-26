@@ -9,7 +9,6 @@
 #include <string>
 #include <string_view>
 #include <vector>
-
 #include <phonk/diagnostics/diagnostic_engine.hpp>
 #include <phonk/lexer/token.hpp>
 #include <phonk/source/source_file.hpp>

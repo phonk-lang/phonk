@@ -3,6 +3,8 @@
 //
 #include <phonk/lexer/lexer.hpp>
 #include <cctype>
+#include <sstream>
+#include <string>
 
 namespace phonk::lexer {
 
