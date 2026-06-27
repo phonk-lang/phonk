@@ -14,6 +14,7 @@ Lexer::Lexer(const source::SourceFile& source, diagnostics::DiagnosticEngine* di
       options_(options) {}
 
 Token Lexer::nextToken() {
+    // Included trivia option to be added later
     if (!options_.includeTrivia) {
         skipTrivia();
     }
@@ -86,7 +87,7 @@ bool Lexer::match(const char expected) {
     advance();
     return true;
 }
-
+// Cast to unsigned char as negative char values can cause incorrect behavior
 bool Lexer::isAlpha(const char character) {
     return character == '_' || std::isalpha(static_cast<unsigned char>(character));
 }
@@ -121,15 +122,15 @@ void Lexer::skipTrivia() {
         if (current() == '/' && peek() == '*') {
             const source::SourceLocation begin{offset_};
 
-            advance();
-            advance();
+            advance(); // Consume '/'
+            advance(); // Consume '*'
 
             bool terminated = false;
 
             while (!isAtEnd()) {
                 if (current() == '*' && peek() == '/') {
-                    advance();
-                    advance();
+                    advance(); // Consume '*'
+                    advance(); // Consume '/'
 
                     terminated = true;
                     break;
@@ -145,7 +146,7 @@ void Lexer::skipTrivia() {
             continue;
         }
 
-        break;
+        break; // Current character is not trivia
     }
 }
 
@@ -179,7 +180,7 @@ Token Lexer::readNumber() {
 }
 
 Token Lexer::readString() {
-    advance();
+    advance(); // Consume opening "
 
     while (!isAtEnd() && current() != '"') {
         advance();
@@ -190,7 +191,7 @@ Token Lexer::readString() {
         return makeToken(TokenType::StringLiteral);
     }
 
-    advance();
+    advance(); // Consume closing "
 
     return makeToken(TokenType::StringLiteral);
 }
