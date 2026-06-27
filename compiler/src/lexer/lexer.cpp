@@ -1,25 +1,27 @@
 //
 // Created by maxmo on 6/20/2026.
 //
-#include <phonk/lexer/lexer.hpp>
 #include <cctype>
+#include <phonk/lexer/lexer.hpp>
+#include <sstream>
+#include <string>
 
 namespace phonk::lexer {
 
 Lexer::Lexer(const source::SourceFile& source, diagnostics::DiagnosticEngine* diagnosticEngine,
              const LexerOptions options)
     : source_(source), input_(source.getContent()), diagnosticEngine_(diagnosticEngine),
-      options_(options) {
-}
+      options_(options) {}
 
 Token Lexer::nextToken() {
-    // Included trivia option to be added later
     if (!options_.includeTrivia) {
         skipTrivia();
     }
 
+    beginToken();
+
     if (isAtEnd()) {
-        return makeToken(TokenType::EndOfFile, {offset_});
+        return makeToken(TokenType::EndOfFile);
     }
 
     if (isAlpha(current())) {
@@ -72,13 +74,9 @@ char Lexer::peek(const std::size_t distance) const {
     return input_[position];
 }
 
-char Lexer::advance() {
-    return input_[offset_++];
-}
+char Lexer::advance() { return input_[offset_++]; }
 
-bool Lexer::isAtEnd() const {
-    return offset_ >= input_.size();
-}
+bool Lexer::isAtEnd() const { return offset_ >= input_.size(); }
 
 bool Lexer::match(const char expected) {
     if (isAtEnd() || current() != expected) {
@@ -89,7 +87,6 @@ bool Lexer::match(const char expected) {
     return true;
 }
 
-// Cast to unsigned char as negative char values can cause incorrect behavior
 bool Lexer::isAlpha(const char character) {
     return character == '_' || std::isalpha(static_cast<unsigned char>(character));
 }
@@ -124,15 +121,15 @@ void Lexer::skipTrivia() {
         if (current() == '/' && peek() == '*') {
             const source::SourceLocation begin{offset_};
 
-            advance(); // Consume '/'
-            advance(); // Consume '*'
+            advance();
+            advance();
 
             bool terminated = false;
 
             while (!isAtEnd()) {
                 if (current() == '*' && peek() == '/') {
-                    advance(); // Consume '*'
-                    advance(); // Consume '/'
+                    advance();
+                    advance();
 
                     terminated = true;
                     break;
@@ -148,12 +145,11 @@ void Lexer::skipTrivia() {
             continue;
         }
 
-        break; // Current character is not trivia
+        break;
     }
 }
 
 Token Lexer::readIdentifierOrKeyword() {
-    const source::SourceLocation begin{offset_};
     std::stringstream ss{};
 
     while (!isAtEnd() && isAlphaNumeric(current())) {
@@ -161,35 +157,29 @@ Token Lexer::readIdentifierOrKeyword() {
         advance();
     }
 
-    return makeToken(keywordType(ss.str()), begin);
+    return makeToken(keywordType(ss.str()));
 }
 
 Token Lexer::readNumber() {
     auto type{TokenType::IntegerLiteral};
 
-    const source::SourceLocation begin = {offset_};
-
-    // Read integer part
     while (!isAtEnd() && isDigit(current())) {
         advance();
     }
 
-    // Read decimal part if present
     if (!isAtEnd() && current() == '.' && isDigit(peek())) {
         type = TokenType::FloatLiteral;
-        advance(); // consume '.'
+        advance();
         while (!isAtEnd() && isDigit(current())) {
             advance();
         }
     }
 
-    return makeToken(type, begin);
+    return makeToken(type);
 }
 
 Token Lexer::readString() {
-    const source::SourceLocation begin{offset_};
-
-    advance(); // Consume opening "
+    advance();
 
     while (!isAtEnd() && current() != '"') {
         advance();
@@ -197,103 +187,101 @@ Token Lexer::readString() {
 
     if (isAtEnd()) {
         reportError("unterminated string literal", {offset_});
-        return makeToken(TokenType::StringLiteral, begin);
+        return makeToken(TokenType::StringLiteral);
     }
 
-    advance(); // Consume closing "
+    advance();
 
-    return makeToken(TokenType::StringLiteral, begin);;
+    return makeToken(TokenType::StringLiteral);
 }
 
 Token Lexer::readOperatorOrPunctuation() {
-    const source::SourceLocation begin{offset_};
-
     const char character = advance();
 
     switch (character) {
     case '+':
-        return makeToken(TokenType::Plus, begin);
+        return makeToken(TokenType::Plus);
 
     case '-':
-        return makeToken(TokenType::Minus, begin);
+        return makeToken(TokenType::Minus);
 
     case '*':
-        return makeToken(TokenType::Star, begin);
+        return makeToken(TokenType::Star);
 
     case '/':
-        return makeToken(TokenType::Slash, begin);
+        return makeToken(TokenType::Slash);
 
     case '%':
-        return makeToken(TokenType::Percent, begin);
+        return makeToken(TokenType::Percent);
 
     case '(':
-        return makeToken(TokenType::OpenParen, begin);
+        return makeToken(TokenType::OpenParen);
 
     case ')':
-        return makeToken(TokenType::CloseParen, begin);
+        return makeToken(TokenType::CloseParen);
 
     case '{':
-        return makeToken(TokenType::OpenBrace, begin);
+        return makeToken(TokenType::OpenBrace);
 
     case '}':
-        return makeToken(TokenType::CloseBrace, begin);
+        return makeToken(TokenType::CloseBrace);
 
     case '[':
-        return makeToken(TokenType::OpenBracket, begin);
+        return makeToken(TokenType::OpenBracket);
 
     case ']':
-        return makeToken(TokenType::CloseBracket, begin);
+        return makeToken(TokenType::CloseBracket);
 
     case ',':
-        return makeToken(TokenType::Comma, begin);
+        return makeToken(TokenType::Comma);
 
     case '.':
-        return makeToken(TokenType::Dot, begin);
+        return makeToken(TokenType::Dot);
 
     case ';':
-        return makeToken(TokenType::Semicolon, begin);
+        return makeToken(TokenType::Semicolon);
 
     case ':':
-        return makeToken(TokenType::Colon, begin);
+        return makeToken(TokenType::Colon);
 
     case '=':
         if (match('=')) {
-            return makeToken(TokenType::EqualEqual, begin);
+            return makeToken(TokenType::EqualEqual);
         }
 
-        return makeToken(TokenType::Equal, begin);
+        return makeToken(TokenType::Equal);
 
     case '!':
         if (match('=')) {
-            return makeToken(TokenType::BangEqual, begin);
+            return makeToken(TokenType::BangEqual);
         }
 
-        return makeToken(TokenType::Bang, begin);
+        return makeToken(TokenType::Bang);
 
     case '<':
         if (match('=')) {
-            return makeToken(TokenType::LessEqual, begin);
+            return makeToken(TokenType::LessEqual);
         }
 
-        return makeToken(TokenType::Less, begin);
+        return makeToken(TokenType::Less);
 
     case '>':
         if (match('=')) {
-            return makeToken(TokenType::GreaterEqual, begin);
+            return makeToken(TokenType::GreaterEqual);
         }
 
-        return makeToken(TokenType::Greater, begin);
+        return makeToken(TokenType::Greater);
 
     case '&':
         if (match('&')) {
-            return makeToken(TokenType::AndAnd, begin);
+            return makeToken(TokenType::AndAnd);
         }
 
         break;
 
     case '|':
         if (match('|')) {
-            return makeToken(TokenType::OrOr, begin);
+            return makeToken(TokenType::OrOr);
         }
 
         break;
@@ -302,15 +290,15 @@ Token Lexer::readOperatorOrPunctuation() {
         break;
     }
 
-    reportError(
-        "Unexpected character '" + std::string(1, character) + "'",
-        begin
-        );
+    reportError("Unexpected character '" + std::string(1, character) + "'", {offset_ - 1});
 
-    return makeToken(TokenType::Unknown, begin);
+    return makeToken(TokenType::Unknown);
 }
 
-Token Lexer::makeToken(const TokenType type, const source::SourceLocation& begin) const {
+void Lexer::beginToken() { tokenStartOffset_ = offset_; }
+
+Token Lexer::makeToken(const TokenType type) const {
+    const source::SourceLocation begin{tokenStartOffset_};
     const source::SourceLocation end{offset_};
 
     const std::string_view lexeme{input_.substr(begin.offset, end.offset - begin.offset)};
@@ -380,4 +368,4 @@ TokenType Lexer::keywordType(const std::string_view text) {
     return TokenType::Identifier;
 }
 
-}
+} // namespace phonk::lexer
