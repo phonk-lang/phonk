@@ -6,12 +6,12 @@
 #define PHONK_LEXER_HPP
 
 #include <cstddef>
-#include <string>
-#include <string_view>
-#include <vector>
 #include <phonk/diagnostics/diagnostic_engine.hpp>
 #include <phonk/lexer/token.hpp>
 #include <phonk/source/source_file.hpp>
+#include <string>
+#include <string_view>
+#include <vector>
 
 namespace phonk::lexer {
 
@@ -21,11 +21,9 @@ struct LexerOptions {
 
 class Lexer {
 public:
-    explicit Lexer(
-        const source::SourceFile& source,
-        diagnostics::DiagnosticEngine* diagnosticEngine = nullptr,
-        LexerOptions options = {}
-        );
+    explicit Lexer(const source::SourceFile& source,
+                   diagnostics::DiagnosticEngine* diagnosticEngine = nullptr,
+                   LexerOptions options = {});
 
     Token nextToken();
 
@@ -38,6 +36,7 @@ private:
     LexerOptions options_;
 
     size_t offset_ = 0;
+    size_t tokenStartOffset_ = 0;
 
     char current() const;
 
@@ -67,7 +66,9 @@ private:
 
     Token readOperatorOrPunctuation();
 
-    Token makeToken(TokenType type, const source::SourceLocation& begin) const;
+    void beginToken();
+
+    Token makeToken(TokenType type) const;
 
     void reportError(const std::string& message, const source::SourceLocation& location) const;
 
