@@ -1,6 +1,6 @@
 # Phonk
 
-![Tests](https://github.com/phonk-lang/phonk/actions/workflows/build.yml/badge.svg)
+![CI](https://github.com/phonk-lang/phonk/actions/workflows/ci.yml/badge.svg)
 ![C++](https://img.shields.io/badge/C++-20-blue.svg)
 ![Release](https://img.shields.io/github/v/release/phonk-lang/phonk?include_prereleases)
 ![License](https://img.shields.io/badge/license-MIT%20%7C%20Apache--2.0-green.svg)
