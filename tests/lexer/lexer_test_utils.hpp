@@ -21,7 +21,7 @@ struct ExpectedToken {
     std::string_view lexeme;
 };
 
-inline std::vector<lexer::Token> lex(std::string_view input) {
+inline std::vector<lexer::Token> lex(const std::string_view input) {
     const source::SourceFile sourceFile{
         "test.phonk",
         std::string{input}
@@ -33,7 +33,7 @@ inline std::vector<lexer::Token> lex(std::string_view input) {
 }
 
 inline void expectTokens(
-    std::string_view input,
+    const std::string_view input,
     const std::vector<ExpectedToken>& expected
     ) {
     const auto tokens = lex(input);

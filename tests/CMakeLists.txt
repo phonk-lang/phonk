@@ -12,8 +12,6 @@ FetchContent_MakeAvailable(googletest)
 
 
 add_executable(phonk_tests
-        lexer/lexer_tests.cpp
-        lexer/lexer_tests.cpp
         lexer/lexer_test_utils.hpp
         lexer/literal_tests.cpp
 )
