@@ -1,0 +1,9 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+	<style>
+		.s0 { fill: #000000 } 
+		.s1 { fill: #ffffff } 
+	</style>
+	<path id="Shape 1" fill-rule="evenodd" class="s0" d="m386.46 110.05l-43.03 275.81-325.25-52.52 48.46-320.44z"/>
+	<path id="Shape 2" fill-rule="evenodd" class="s0" d="m340.62 15.68l48.48 343.34-316.21 25.56-63.37-340.01z"/>
+	<path id="P" class="s1" aria-label="P"  d="m322.2 161.2q0 33.4-23.9 57.3-23.5 23.4-56.9 23.4h-66v77.1h-73.4v-165.1h-25.7v-73.4h165.1q33.4 0 56.9 23.8 23.9 23.5 23.9 56.9zm-73.4 0q0-18.3-22-18.3h-51.4v36.7h51.4q22 0 22-18.4z"/>
+</svg>
